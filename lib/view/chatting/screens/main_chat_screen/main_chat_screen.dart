@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/core/utils/image_constant.dart';
-import 'package:time_status/view/chatting/screens/chats/chats_screen.dart';
-import 'package:time_status/view/chatting/screens/chats_screen/chats_screen.dart';
+import 'package:time_status/view/chatting/controller/chat_controller.dart';
+import 'package:time_status/view/chatting/screens/chats/chats.dart';
 import 'package:time_status/widget/bottom_nav_bar.dart';
 
 import '../../../../core/utils/math_utils.dart';
+import '../group_chats/group_chats_screen.dart';
 
 class MainChat extends StatefulWidget {
   const MainChat({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class MainChat extends StatefulWidget {
 
 class _MainChatState extends State<MainChat> {
   int _currentIndex = 0; // Added to track the selected tab index
+  final ChatController chatController = Get.put(ChatController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class _MainChatState extends State<MainChat> {
         appBar: AppBar(
           backgroundColor: AppColor.appgreen,
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text("Chatting"),
           bottom: TabBar(
             indicatorColor: AppColor.oranegapp,
@@ -52,7 +56,7 @@ class _MainChatState extends State<MainChat> {
                         shape: BoxShape.circle,
                         color: AppColor.oranegapp,
                       ),
-                      child: Center(child: Text('2')),
+                      child: Center(child: Text(chatController.modelChatList.length.toString())),
                     ),
                   ],
                 ),
@@ -80,8 +84,9 @@ class _MainChatState extends State<MainChat> {
           children: [
             // Content for Tab 1
             Chats(),
+
             // Content for Tab 2
-            ChatsScreen()
+            GroupChatsScreen()
           ],
         ),
       //  bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),

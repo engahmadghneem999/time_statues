@@ -52,7 +52,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
             children: _widgetOptions,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton:   Column(
+          floatingActionButton:  Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -67,6 +67,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: FloatingActionButton(
+                        heroTag: "text",
                         onPressed: () {
                           // Handle the first action here
                         },
@@ -80,6 +81,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
                     ),
                     const SizedBox(width: 10),
                     FloatingActionButton(
+                      heroTag: "image",
                       onPressed: () {
                         // Handle the second action here
                       },
@@ -94,6 +96,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: FloatingActionButton(
+                        heroTag: "video",
                         onPressed: () {
                           // Handle the third action here
                         },
@@ -116,6 +119,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 40.0),
                 child: FloatingActionButton(
+                  heroTag: "add_close",
                   onPressed: _toggleExpanded,
                   backgroundColor: _isExpanded ? AppColor.appgreen : AppColor.appColor,
                   elevation: 0,
@@ -128,7 +132,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
             ],
           ),
         bottomNavigationBar: BottomAppBar(
-          padding: const EdgeInsets.fromLTRB(25, 0, 25, 15),
+          padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
           color: Colors.transparent,
 
           child: ClipRRect(
@@ -234,6 +238,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
               type: BottomNavigationBarType.fixed,
               showSelectedLabels: false,
               showUnselectedLabels: false,
+
               enableFeedback: false,
               selectedItemColor: AppColor.oranegapp, // Set the selected item color to orange
             ),

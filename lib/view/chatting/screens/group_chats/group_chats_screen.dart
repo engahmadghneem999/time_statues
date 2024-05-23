@@ -9,8 +9,8 @@ import 'package:time_status/widget/bottom_nav_bar.dart';
 import '../../../../data/model/chat_model.dart';
 import 'widgets/chats_item_widget.dart';
 
-class ChatsScreen extends StatelessWidget {
-  const ChatsScreen({Key? key}) : super(key: key);
+class GroupChatsScreen extends StatelessWidget {
+  const GroupChatsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

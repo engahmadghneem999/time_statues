@@ -1,94 +1,104 @@
-import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 import 'package:time_status/core/constant/color.dart';
+import 'package:time_status/view/chatting/controller/chat_controller.dart';
 import 'package:time_status/view/favorites/screens/favorites_screen.dart';
 import '../../../../data/model/Message.dart';
 import '../../../../widget/custom_text.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../../controller/send_message_controller.dart';
+
 class ChatInnerScreen extends StatefulWidget {
-  ChatInnerScreen({Key? key}) : super(key: key);
+  const ChatInnerScreen({
+    Key? key,
+    this.userId,
+  }) : super(key: key);
+  final String? userId;
 
   @override
   State<ChatInnerScreen> createState() => _ChatInnerScreenState();
 }
 
 class _ChatInnerScreenState extends State<ChatInnerScreen> {
-  List<Message> chatMessages = [];
+  // List<Message> chatMessages = [];
   List<Message> FavMessages = [];
-  TextEditingController textController = TextEditingController();
+  // TextEditingController textController = TextEditingController();
 
   Map<String, List<Message>> categoryMessages = {};
 
   // late FlutterSoundRecorder _audioRecorder;
   late AudioPlayer _audioPlayer;
 
+  final controller1 = Get.put(ChatController());
 
   @override
   void initState() {
-
     // _audioRecorder = FlutterSoundRecorder();
+    //controller1.fetchDetailChats(userId);
     _audioPlayer = AudioPlayer();
     // TODO: implement initState
     super.initState();
   }
 
-
   @override
   void dispose() {
-   // _audioRecorder.closeRecorder();
+    // _audioRecorder.closeRecorder();
     _audioPlayer.dispose();
     super.dispose();
   }
+
   // AudioPlayer audioPlayer = new AudioPlayer();
   // Duration duration = new Duration();
   // Duration position = new Duration();
   // bool isPlaying = false;
   // bool isLoading = false;
   // bool isPause = false;
-  void _sendMessage() async {
-    final text = textController.text.trim();
-    if (text.isNotEmpty) {
-      final newMessage = Message(
-        text: text,
-        sender: 'User 1',
-        timestamp: DateTime.now(),
-      );
-      setState(() {
-        chatMessages.add(newMessage);
-      });
-      textController.clear();
-    } else if (_selectedImage != null) {
-      // Handle sending the selected image as a message
-      final newImageMessage = Message(
-        imageUrl: _selectedImage!, // Use non-null assertion here
-        sender: 'User 1',
-        timestamp: DateTime.now(),
-      );
-      setState(() {
-        chatMessages.add(newImageMessage);
-        _selectedImage = null; // Clear the selected image after sending
-      });
-    }
-  }
 
+  // void _sendMessage() async {
+  //   final text = textController.text.trim();
+  //   if (text.isNotEmpty) {
+  //     final newMessage = Message(
+  //       text: text,
+  //       sender: 'User 1',
+  //       timestamp: DateTime.now(),
+  //     );
+  //     setState(() {
+  //       chatMessages.add(newMessage);
+  //     });
+  //     textController.clear();
+  //   } else if (_selectedImage != null) {
+  //     // Handle sending the selected image as a message
+  //     final newImageMessage = Message(
+  //       imageUrl: _selectedImage!, // Use non-null assertion here
+  //       sender: 'User 1',
+  //       timestamp: DateTime.now(),
+  //     );
+  //     setState(() {
+  //       chatMessages.add(newImageMessage);
+  //       _selectedImage = null; // Clear the selected image after sending
+  //     });
+  //   }
+  // }
 
-  String? _selectedImage; // Variable to store the selected image file path or URL
+  // String?
+  //     _selectedImage; // Variable to store the selected image file path or URL
 
-  void _selectImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  // void _selectImage() async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _selectedImage = pickedFile.path; // Store the selected image file path
+  //     });
+  //   }
+  // }
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = pickedFile.path; // Store the selected image file path
-      });
-    }
-  }
   @override
   Widget build(BuildContext context) {
+    print('inner chat screen');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appgreen,
@@ -97,10 +107,10 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
             CircleAvatar(
                 child: Image.asset('assets/images/img_rectangle162.png'),
                 radius: 20),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            Text('user 1'),
+            const Text("admin"),
           ],
         ),
         actions: [
@@ -112,105 +122,177 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
                               categoryMessages: categoryMessages,
                             )));
                   },
-                  icon: Icon(Icons.favorite),
+                  icon: const Icon(Icons.favorite),
                 )
               : Container()
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                for (int index = 0; index < FavMessages.length; index++)
-                  Container(
-                    margin: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        BubbleSpecialOne(
-                          text: FavMessages[index].text!,
-                          color: Color(0xFFE8E8EE),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.lock_clock),
-                          onPressed: () {
-                            _removepinMessage(FavMessages[index]);
-                            // _pinMessage(message);
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: chatMessages.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTapDown: (TapDownDetails details) {
-                    _showMessageOptions(
-                        chatMessages[index], context, details.globalPosition);
-                  },
-                  child:  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+      body: GetBuilder<ChatController>(
+          init: ChatController(),
+          builder: (controller) {
+            List allMessages = controller.chatMessages;
+            List<Message> sorted = sortedMessages(allMessages, widget.userId);
+
+            controller.idUser = widget.userId;
+
+            controller1.fetchDetailChats(controller.idUser);
+            print("iduser=${controller.idUser}");
+
+            return Column(
+              children: <Widget>[
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: [
-                      BubbleSpecialThree(
-                        text: chatMessages[index].text!,
-                        color: Color(0xFFE8E8EE),
-                        // sented
-                        sent: true,
-                       //seen
-                       //  seen: true,
-                      ),
-                      SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          '${chatMessages[index].timestamp.hour}:${chatMessages[index].timestamp.minute}',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                      for (int index = 0; index < FavMessages.length; index++)
+                        Container(
+                          margin: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              BubbleSpecialOne(
+                                text: FavMessages[index].text!,
+                                color: const Color(0xFFE8E8EE),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.lock_clock),
+                                onPressed: () {
+                                  _removepinMessage(FavMessages[index]);
+                                  // _pinMessage(message);
+                                },
+                              )
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
+                ),
 
-
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
+                ///chat body
                 Expanded(
-                  child: TextField(
-                    controller: textController,
-                    decoration: InputDecoration(labelText: 'Enter a message'),
+                  child: ListView.builder(
+                    itemCount: sorted.length, // Use sorted list here
+                    itemBuilder: (context, index) {
+                      final message = sorted[index];
+                      final isCurrentUserMessage =
+                          message.sender == widget.userId;
+                      // message.sender == message.receiver;
+                      // final isCurrentUserMessage = controller.chatMessages.userId == widget.userId;
+
+                      print('jjjjjjjjjjjjj=${isCurrentUserMessage}');
+                      print(" message.sender=${message.sender}");
+                      print('widget.userId;${widget.userId}');
+                      return Row(
+                        mainAxisAlignment: isCurrentUserMessage
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTapDown: (TapDownDetails details) {
+                              _showMessageOptions(
+                                  sorted[index], // Use sorted list here
+                                  context,
+                                  details.globalPosition);
+                            },
+                            child: Column(
+                              crossAxisAlignment: isCurrentUserMessage
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                isCurrentUserMessage
+                                    ? BubbleSpecialThree(
+                                        text: message.text ?? "",
+                                        color: isCurrentUserMessage
+                                            ? const Color(0xFFE8E8EE)
+                                            : Colors
+                                                .blue, // Set color based on sender
+                                        // sented
+                                        tail:
+                                            isCurrentUserMessage ? true : false,
+                                        sent: true,
+                                        //seen
+                                        seen: isCurrentUserMessage
+                                            ? message.isSeen ?? false
+                                            : false,
+                                      )
+                                    : BubbleSpecialTwo(
+                                        text: message.text ?? "",
+                                        isSender: false,
+                                        color: isCurrentUserMessage
+                                            ? const Color(0xFFE8E8EE)
+                                            : Colors.blue,
+                                      ),
+                                // BubbleSpecialThree(
+                                //       text: message.text ?? "",
+                                //   tail: isCurrentUserMessage?true:false,
+                                //       color: isCurrentUserMessage
+                                //           ? const Color(0xFFE8E8EE)
+                                //           : Colors
+                                //               .blue, // Set color based on sender
+                                //       // sented
+                                //       sent: true,
+                                //       //seen
+                                //       seen: isCurrentUserMessage?message.isSeen ?? false :false,
+                                //     ),
+                                const SizedBox(height: 4),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    '${message.timestamp?.hour}:${message.timestamp?.minute}',
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.photo), // Icon for sending images
-                  onPressed:_selectImage,
-                ),
-                IconButton(
-                  icon: Icon(Icons.mic), // Icon for recording audio
-                  onPressed: () {
-                    _toggleRecording();
 
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.send), // Icon for sending text
-                  onPressed: _sendMessage,
-                ),
+                GetBuilder<SendMessageController>(
+                  init: SendMessageController(),
+                  builder: (sendController) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              controller: sendController.textController,
+                              decoration: const InputDecoration(
+                                  labelText: 'Enter a message'),
+                            ),
+                          ),
+                          IconButton(
+                            icon:
+                                const Icon(Icons.photo), // Icon for sending images
+                            onPressed: () {
+                              sendController.selectImage();
+                            },
+                          ),
+                          // IconButton(
+                          //   icon: const Icon(Icons.mic), // Icon for recording audio
+                          //   onPressed: () {
+                          //     _toggleRecording();
+                          //   },
+                          // ),
+                          IconButton(
+                            icon: const Icon(Icons.send), // Icon for sending text
+                            onPressed: () {
+                              sendController.sendMessage( receiver: controller.idUser!);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                )
               ],
-            ),
-          )
-        ],
-      ),
+            );
+          }),
 
       // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -236,11 +318,11 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
         PopupMenuItem(
           child: Row(
             children: [
-              CustomText(text: 'Pin', color: AppColor.white),
-              Spacer(),
+              const CustomText(text: 'Pin', color: AppColor.white),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.pin),
+                icon: const Icon(Icons.pin),
                 color: AppColor.oranegapp,
               )
             ],
@@ -253,13 +335,13 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
         PopupMenuItem(
           child: Row(
             children: [
-              CustomText(text: 'Favorites', color: AppColor.white),
-              Spacer(),
+              const CustomText(text: 'Favorites', color: AppColor.white),
+              const Spacer(),
               IconButton(
                 onPressed: () {
                   _addToCategory(context, message);
                 },
-                icon: Icon(Icons.favorite),
+                icon: const Icon(Icons.favorite),
                 color: AppColor.oranegapp,
               )
             ],
@@ -271,11 +353,11 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
         PopupMenuItem(
           child: Row(
             children: [
-              CustomText(text: 'Forward', color: AppColor.white),
-              Spacer(),
+              const CustomText(text: 'Forward', color: AppColor.white),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.forward_5_outlined),
+                icon: const Icon(Icons.forward_5_outlined),
                 color: AppColor.oranegapp,
               )
             ],
@@ -302,7 +384,7 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add to Category'),
+          title: const Text('Add to Category'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -310,9 +392,10 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
                 children: [
                   TextField(
                     controller: categoryController,
-                    decoration: InputDecoration(labelText: 'New Category Name'),
+                    decoration:
+                        const InputDecoration(labelText: 'New Category Name'),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   for (int i = 0; i < categories.length; i++)
                     Row(
                       children: [
@@ -340,7 +423,7 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
                 }
                 Navigator.of(context).pop();
               },
-              child: Text('Create a New Category'),
+              child: const Text('Create a New Category'),
             ),
             TextButton(
               onPressed: () {
@@ -352,7 +435,7 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
 
                 Navigator.of(context).pop();
               },
-              child: Text('Add to Selected Categories'),
+              child: const Text('Add to Selected Categories'),
             ),
           ],
         );
@@ -462,40 +545,59 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
 //     });
 //   });
 // }
-  }
+}
 
+bool _isRecording = false;
+late String _recordedFilePath;
 
-  bool _isRecording = false;
-  late String _recordedFilePath;
-
-  Future<void> _toggleRecording() async {
-    if (!_isRecording) {
-      try {
-        // await _audioRecorder.openRecorder();
-        // await _audioRecorder.startRecorder(
-        //   toFile: "your_audio_file.mp3",
-        //   codec: Codec.mp3,
+Future<void> _toggleRecording() async {
+  if (!_isRecording) {
+    try {
+      // await _audioRecorder.openRecorder();
+      // await _audioRecorder.startRecorder(
+      //   toFile: "your_audio_file.mp3",
+      //   codec: Codec.mp3,
       //  );
 
-        // setState(() {
-        //   _isRecording = true;
-        // });
-      } catch (e) {
-        print("Error starting recording: $e");
-      }
-    } else {
-      try {
-        // String? path = await _audioRecorder.stopRecorder();
-        // setState(() {
-        //   _isRecording = false;
-        //   _recordedFilePath = path!;
-        // });
+      // setState(() {
+      //   _isRecording = true;
+      // });
+    } catch (e) {
+      print("Error starting recording: $e");
+    }
+  } else {
+    try {
+      // String? path = await _audioRecorder.stopRecorder();
+      // setState(() {
+      //   _isRecording = false;
+      //   _recordedFilePath = path!;
+      // });
 
-        // Implement logic to send the recorded file (path) here
-      } catch (e) {
-        print("Error stopping recording: $e");
-      }
+      // Implement logic to send the recorded file (path) here
+    } catch (e) {
+      print("Error stopping recording: $e");
+    }
+  }
+}
+// Inside your ChatController class
+
+List<Message> sortedMessages(List<dynamic> messages, String? userId) {
+  List<Message> senderMessages = [];
+  List<Message> yourMessages = [];
+
+  // Filter messages into senderMessages and yourMessages
+  for (var message in messages) {
+    if (message.sender == userId) {
+      yourMessages.add(message);
+    } else {
+      senderMessages.add(message);
     }
   }
 
+  // Sort messages individually
+  senderMessages.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+  yourMessages.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
 
+  // Concatenate senderMessages and yourMessages
+  return [...senderMessages, ...yourMessages];
+}

@@ -5,14 +5,18 @@ import 'package:time_status/core/constant/constant_data.dart';
 import 'package:time_status/core/constant/shared_preferences_keys.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
 import '../../../core/class/status_request.dart';
+import '../../../core/service/link.dart';
 import '../../../core/service/service.dart';
 import 'package:http/http.dart' as http;
+import '../../../widget/bottom_nav_bar.dart';
 import '../screen/login_screen.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   late TextEditingController username = TextEditingController();
   late TextEditingController password = TextEditingController();
+
   RxBool isPasswordHidden = true.obs;
 
   @override
@@ -48,26 +52,38 @@ class LoginController extends GetxController {
   }
 
   login() async {
+    print("enter login");
     try {
+      print("try");
+      String url= "${AppLink.login}?username=${username.text}&password=${password.text}";
+      print("url=$url");
       var response = await http.post(
-        Uri.parse("https://center.lavetro-agency.com/api/login"),
-        //Uri.parse(AppLink.login),
+        // Uri.parse("https://center.lavetro-agency.com/api/login"),
+       // Uri.parse("http://195.35.52.10:5000/api/User/Login?username=${username.text}&password=${password.text}"),
+       Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer ${ConstData.token}',
+          // 'Authorization': 'Bearer ${ConstData.token}',
+
+          'Authorization': 'Bearer 4bc4cac033a5a44a67877c556b60159e',
         },
-        body: {
-          "username": username.text,
-          "password": password.text,
-        },
+          // 4bc4cac033a5a44a67877c556b60159e
+        // body: {
+        //   "username": username.text,
+        //   "password": password.text,
+        // },
       );
       print("jsonDecode = ${response.body}");
+      print("statuscode=${response.statusCode}");
       var decodeResponse = json.decode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode==201) {
+
+
         print("20000000000");
         myServices.sharedPreferences.setString(
           SharedPreferencesKeys.username,
-          username.text,
+         username.text,
+
         );
 
         var token = decodeResponse["token"];
@@ -86,14 +102,15 @@ class LoginController extends GetxController {
             .setBool(SharedPreferencesKeys.isLoginKey, true);
         print(response.statusCode);
 
-        Get.to(
-              () => HomeScreen(),
+        Get.offAll(
+              () => const CustomBottomNavigationBar(),
         );
         isLoading = false;
         update();
         // ConstData.token = decodeResponse["token"];
         return true;
-      } else {
+      }
+      else {
         isLoading = false;
         Get.to(
               () => LoginScreen(),
@@ -104,6 +121,7 @@ class LoginController extends GetxController {
         return null;
       }
     } catch (e) {
+      print('error catch=$e');
       isLoading = false;
       Get.to(
             () => LoginScreen(),

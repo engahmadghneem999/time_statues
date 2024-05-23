@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../core/constant/routes.dart';
 import '../../../core/constant/shared_preferences_keys.dart';
 import '../../../core/service/service.dart';
+import '../../../widget/bottom_nav_bar.dart';
 
 class SplashController extends GetxController {
   MyServices myServices = Get.find();
@@ -26,7 +27,7 @@ class SplashController extends GetxController {
         if (myServices.sharedPreferences
                 .getBool(SharedPreferencesKeys.isLoginKey) ==
             true) {
-          Get.toNamed(AppRoute.bottomNavigationBar);
+          Get.to(const CustomBottomNavigationBar());
         } else {
           Get.toNamed(AppRoute.logIn);
         }

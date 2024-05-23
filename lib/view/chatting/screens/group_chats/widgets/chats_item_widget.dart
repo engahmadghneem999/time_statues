@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/view/chatting/screens/chat_inner_screen/chat_inner_screen.dart';
 import 'package:time_status/data/model/chat_model.dart';
-import 'package:time_status/view/chatting/screens/chats_screen/widgets/stacked_widgets.dart';
 import 'package:time_status/view/chatting/screens/details/page.dart';
+import 'package:time_status/view/chatting/screens/group_chats/widgets/stacked_widgets.dart';
 import '../../../../../core/utils/math_utils.dart';
 
 
@@ -61,7 +61,7 @@ class ChatsItemWidget extends StatelessWidget {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) =>  ChatInnerScreen())),
+                          builder: (_) =>  ChatInnerScreen(userId: "test",))),
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(
@@ -118,7 +118,7 @@ class ChatsItemWidget extends StatelessWidget {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) =>  ChatInnerScreen())),
+                          builder: (_) =>  ChatInnerScreen(userId: "test",))),
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(

@@ -1,7 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:time_status/core/constant/routes.dart';
-import 'package:time_status/view/chatting/screens/chats_screen/chats_screen.dart';
+import 'package:time_status/view/chatting/screens/group_chats/group_chats_screen.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
 import 'package:time_status/view/login/binding/login_binding.dart';
 import 'package:time_status/view/map/screen/mapscreen.dart';
@@ -36,7 +36,7 @@ List<GetPage<dynamic>>? routes = [
     transition: Transition.upToDown,
   ),  GetPage(
     name: AppRoute.chatting,
-    page: () =>  const ChatsScreen(),
+    page: () =>  const GroupChatsScreen(),
     transition: Transition.leftToRight,
   ), GetPage(
     name: AppRoute.team,

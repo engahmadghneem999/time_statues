@@ -8,11 +8,10 @@ import 'package:time_status/data/model/chat_model.dart';
 import 'package:time_status/view/chatting/screens/details/page.dart';
 import '../../../../../core/utils/math_utils.dart';
 
-class ItemWidget extends StatelessWidget {
+class ItemWidgetLeft extends StatelessWidget {
   final ModelChat modelChat;
 
-
-  const ItemWidget(this.modelChat, {super.key,});
+  const ItemWidgetLeft(this.modelChat, {super.key});
 
 
 
@@ -30,7 +29,7 @@ class ItemWidget extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: AppColor.whiteA700,
+            color: AppColor.red300,
             borderRadius: BorderRadius.circular(
               getHorizontalSize(
                 12,
@@ -48,12 +47,9 @@ class ItemWidget extends StatelessWidget {
                   child: Image.asset('assets/images/user.png'),
                 ),
                 onTap: () {
-
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
 
-                    return ChatInnerScreen(userId:modelChat.userId);
-
-
+                    return ChatInnerScreen(userId: modelChat.userId,);
                   }));
                   print(" modelChat.userId,${ modelChat.userId}");
                 },

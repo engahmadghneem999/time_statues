@@ -10,7 +10,7 @@ class CustomTextForm extends StatelessWidget {
   final IconData? iconSuffixData;
   final Color? iconPrefixColor;
   final Color? iconSuffixColor;
-  final TextEditingController? mycontroller;
+  // final TextEditingController? mycontroller;
   final String? Function(String?)? valid;
   final void Function(String)? onChanged;
   final bool readOnly;
@@ -34,7 +34,7 @@ class CustomTextForm extends StatelessWidget {
     this.hintText,
     this.iconPrefixData,
     this.iconSuffixData,
-    this.mycontroller,
+    // this.mycontroller,
     this.valid,
     this.readOnly = false,
     this.obscuretext = false,
