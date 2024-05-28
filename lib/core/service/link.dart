@@ -1,23 +1,27 @@
-
 import '../constant/constant_data.dart';
 
 class AppLink {
+  //root
   static String appRoot = "http://algor.somee.com";
-  // static String appRoot="http://195.35.52.10:5000";
   static String serverApiRoot = "$appRoot/api";
-
-  static String graphData= "$serverApiRoot/GraphData/";
-
-  // static String imageWithRootUrl = ('$appRoot/storage/');
-  // static String imageWithoutRootUrl = (appRoot);
-
-//
-  //static String test = "$serverApiRoot/";
-  // static String register = "$serverApiRoot/auth/register";
+  //Home screen graph
+  static String graphData = "$serverApiRoot/GraphData/";
+  //User Info GETS
+  static String getUserData = "$serverApiRoot/User/me";
+  //One to One Chats
+  //Messages pin and fav POSTS
+  static String pinMessage(int id) => "$serverApiRoot/Chat/PinMessage/$id";
+  static String favMessage(int id) =>
+      "$serverApiRoot/Chat/FavouriteMessage/$id";
+  //AUTH LINKS
   static String login = "$serverApiRoot/User/Login";
+  static String register = "$serverApiRoot/User/register";
   static String logout = "$serverApiRoot/logout";
-
-  //getSections
+  //Groups
+  //GET chats
+  static String getGroupsChats = "$serverApiRoot/ChatGroup";
+  static String joinToGroup(int id) =>
+      "$serverApiRoot/ChatGroup/JoinToGroup/$id";
 }
 
 Map<String, String> getHeader() {
@@ -31,15 +35,7 @@ Map<String, String> getHeader() {
 
 Map<String, String> getHeaderToken() {
   Map<String, String> mainHeader = {
-    // 'Content-Type': 'application/json',
-    // 'Accept': 'application/json',
-    // 'X-Requested-With': 'XMLHttpRequest',
     'Authorization': 'Bearer ${ConstData.token}',
   };
   return mainHeader;
 }
-//if (ConstData.isLogin) {
-//     return {
-//       ...mainHeader,
-//       'Authorization': 'Bearer ${ConstData.token}',
-//     };

@@ -55,35 +55,24 @@ class LoginController extends GetxController {
     print("enter login");
     try {
       print("try");
-      String url= "${AppLink.login}?username=${username.text}&password=${password.text}";
+      String url =
+          "${AppLink.login}?username=${username.text}&password=${password.text}";
       print("url=$url");
       var response = await http.post(
-        // Uri.parse("https://center.lavetro-agency.com/api/login"),
-       // Uri.parse("http://195.35.52.10:5000/api/User/Login?username=${username.text}&password=${password.text}"),
-       Uri.parse(url),
+        Uri.parse(url),
         headers: {
-          // 'Authorization': 'Bearer ${ConstData.token}',
-
           'Authorization': 'Bearer 4bc4cac033a5a44a67877c556b60159e',
         },
-          // 4bc4cac033a5a44a67877c556b60159e
-        // body: {
-        //   "username": username.text,
-        //   "password": password.text,
-        // },
       );
       print("jsonDecode = ${response.body}");
       print("statuscode=${response.statusCode}");
       var decodeResponse = json.decode(response.body);
 
-      if (response.statusCode == 200 || response.statusCode==201) {
-
-
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print("20000000000");
         myServices.sharedPreferences.setString(
           SharedPreferencesKeys.username,
-         username.text,
-
+          username.text,
         );
 
         var token = decodeResponse["token"];
@@ -91,7 +80,6 @@ class LoginController extends GetxController {
         print('ConstData=  ${ConstData.token}');
 
         ConstData.isLogin = true;
-        // ConstData.token = token;
         myServices.sharedPreferences.setString(
           SharedPreferencesKeys.tokenKey,
           ConstData.token,
@@ -103,17 +91,15 @@ class LoginController extends GetxController {
         print(response.statusCode);
 
         Get.offAll(
-              () => const CustomBottomNavigationBar(),
+          () => const CustomBottomNavigationBar(),
         );
         isLoading = false;
         update();
-        // ConstData.token = decodeResponse["token"];
         return true;
-      }
-      else {
+      } else {
         isLoading = false;
         Get.to(
-              () => LoginScreen(),
+          () => LoginScreen(),
         );
         Get.snackbar("error".tr, "username_password_wrong".tr,
             backgroundColor: Colors.white);
@@ -124,7 +110,7 @@ class LoginController extends GetxController {
       print('error catch=$e');
       isLoading = false;
       Get.to(
-            () => LoginScreen(),
+        () => LoginScreen(),
       );
       print('e in catchlogin=$e');
       Get.snackbar(

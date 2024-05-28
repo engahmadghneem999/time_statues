@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/core/constant/image_assets.dart';
+import 'package:time_status/register/view/register_screen.dart';
 import 'package:time_status/view/login/screen/widget/change_lang_bottom_sheet.dart';
-import 'package:time_status/widget/bottom_nav_bar.dart';
 import 'package:time_status/widget/custom_button.dart';
 import 'package:time_status/widget/custom_text_form_filed.dart';
 import 'package:time_status/widget/loading.dart';
@@ -124,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                                   Obx(() {
                                     return CustomTextForm(
                                       obscuretext: false,
-                                         // controller.isPasswordHidden.value,
+                                      // controller.isPasswordHidden.value,
                                       hintText: 'password'.tr,
                                       keyboardType: TextInputType.text,
                                       iconSuffixData: Icons.lock_outline,
@@ -223,18 +225,25 @@ class LoginScreen extends StatelessWidget {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  const Row(
+                                  Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       CustomText(
-                                        text: 'Already have account?',
+                                        text: 'You dont have an account ?',
                                         color: AppColor.appgreen,
                                       ),
-                                      CustomText(
-                                        text: 'Register',
-                                        color: AppColor.white,
+                                      GestureDetector(
+                                        onTap: () => Get.offAll(
+                                          () => RegisterScreen(),
+                                        ),
+                                        child: Container(
+                                          child: CustomText(
+                                            text: 'Register',
+                                            color: AppColor.white,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   )

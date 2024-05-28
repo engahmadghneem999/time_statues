@@ -8,6 +8,7 @@ import 'package:time_status/view/home/widgets/slider.dart';
 import 'package:time_status/view/profile/screens/profile.dart';
 import 'package:time_status/widget/drawer.dart';
 import 'package:time_status/widget/loading.dart';
+import '../../profile/screens/controller/profile_controller.dart';
 import '../../splash/screen/widgets/custom_text.dart';
 import '../controller/home_controller.dart';
 
@@ -19,61 +20,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // List<int> dayData = [1, 2, 5, 50, 50, 100, 7];
-
-  // List<String> dayLabels = ["San", "Man", "The", "Win", "Thr", "Fri", "Sat"];
-  //
-  // List<int> weekData = [1, 2, 5, 50, 50, 13, 77];
-  // List<String> weekLabels = ["Wk1", "Wk2", "Wk3", "Wk4", "Wk5", "Wk6", "Wk7"];
-  //
-  // List<int> monthData = [1, 2, 5, 50, 5, 13, 7];
-  // List<String> monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
-  //
-  // List<int> yearData = [1, 20, 5, 50, 50, 13, 7];
-  // List<String> yearLabels = [
-  //   "2023",
-  //   "2024",
-  //   "2025",
-  //   "2026",
-  //   "2027",
-  //   "2028",
-  //   "2029"
-  // ];
-  //
-  // String activeButton = 'Day';
-  //
-  // void setActiveButton(String buttonName) {
-  //   setState(() {
-  //     activeButton = buttonName;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // List<int> data;
-    // List<String> labels;
-    //
-    // switch (activeButton) {
-    //   case 'Day':
-    //     data = dayData;
-    //     labels = dayLabels;
-    //     break;
-    //   case 'Week':
-    //     data = weekData;
-    //     labels = weekLabels;
-    //     break;
-    //   case 'Month':
-    //     data = monthData;
-    //     labels = monthLabels;
-    //     break;
-    //   case 'Year':
-    //     data = yearData;
-    //     labels = yearLabels;
-    //     break;
-    //   default:
-    //     data = dayData;
-    //     labels = dayLabels;
-    // }
+    final ProfileController profileController = Get.put(ProfileController());
 
     return Scaffold(
       endDrawer: const MyDrawer(),
@@ -87,10 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           backgroundColor: AppColor.appbargreen,
           centerTitle: true,
-          title: const Text(
-            "alhasan",
-            style: TextStyle(fontFamily: "Signatra", fontSize: 20),
-          ),
+          title: Obx(() {
+            return Text(
+              profileController.username.value,
+              style: TextStyle(fontFamily: "Signatra", fontSize: 20),
+            );
+          }),
           leading: InkWell(
               onTap: () {
                 Navigator.of(context).push(
@@ -184,8 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           .size
                                                           .height *
                                                       0.32),
-                                              nums:controller.graphModel.dataPoints,
-                                              listGradX: controller.graphModel.labels,
+                                              nums: controller
+                                                  .graphModel.dataPoints,
+                                              listGradX:
+                                                  controller.graphModel.labels,
                                               colorAxes: AppColor.appgreen,
                                               colorLine: AppColor.buttons,
                                               strokeLine: 2.0,
@@ -277,7 +230,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           controller.fetchGraphData();
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: controller.activeButton == ''
+                                          backgroundColor: controller
+                                                      .activeButton ==
+                                                  ''
                                               ? AppColor
                                                   .backgroundbutton // Active button color
                                               : Colors.transparent,
@@ -295,7 +250,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           controller.fetchGraphData();
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: controller.activeButton ==
+                                          backgroundColor: controller
+                                                      .activeButton ==
                                                   'week'
                                               ? AppColor
                                                   .backgroundbutton // Active button color
@@ -314,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           controller.fetchGraphData();
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: controller.activeButton ==
+                                          backgroundColor: controller
+                                                      .activeButton ==
                                                   'month'
                                               ? AppColor
                                                   .backgroundbutton // Active button color
@@ -333,7 +290,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           controller.fetchGraphData();
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: controller.activeButton ==
+                                          backgroundColor: controller
+                                                      .activeButton ==
                                                   'year'
                                               ? AppColor
                                                   .backgroundbutton // Active button color

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constant/color.dart';
 
 class DividerVertical extends StatelessWidget {
   const DividerVertical({

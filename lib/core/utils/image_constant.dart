@@ -1,14 +1,7 @@
 class ImageConstant {
   static String imgIconsoundoff = 'assets/images/img_iconsoundoff.svg';
-
   static String imgIconuser = 'assets/images/img_iconuser.svg';
-
-  static String imgRectangle1621 = 'assets/images/img_rectangle162_1.png';
-
   static String imgRectangle1633 = 'assets/images/img_rectangle163_3.png';
-
-  static String imgIconuser1 = 'assets/images/img_iconuser_1.svg';
-
   static String imgRectangle1624 = 'assets/images/img_rectangle162_4.png';
 
   static String imgRectangle1632 = 'assets/images/img_rectangle163_2.png';

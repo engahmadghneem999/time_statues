@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 class SliderL extends StatefulWidget {
   const SliderL({Key? key}) : super(key: key);
 
@@ -15,7 +15,6 @@ class _SliderLState extends State<SliderL> {
     'assets/images/coins2.jpeg',
     'assets/images/coins3.jpeg',
     'assets/images/coins4.jpeg',
-
   ];
 
   @override
@@ -30,7 +29,6 @@ class _SliderLState extends State<SliderL> {
           );
         },
         options: CarouselOptions(
-            // height: 200,
             onPageChanged: (index, reason) {
               setState(() {
                 activeIndex = index;
@@ -41,14 +39,12 @@ class _SliderLState extends State<SliderL> {
   }
 
   Widget buildImage(String sliders, int index) => Container(
-    margin: const EdgeInsets.symmetric(horizontal: 1),
-    color: Colors.grey,
-    child: Image.asset(
-      sliders,
-      fit: BoxFit.fill,
-      width: double.infinity,
-    ),
-  );
+        margin: const EdgeInsets.symmetric(horizontal: 1),
+        color: Colors.grey,
+        child: Image.asset(
+          sliders,
+          fit: BoxFit.fill,
+          width: double.infinity,
+        ),
+      );
 }
-
-

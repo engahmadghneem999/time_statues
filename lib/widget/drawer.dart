@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_status/view/favorites/screens/favorites_screen.dart';
 import 'package:time_status/widget/draweitem.dart';
-
 import '../view/settings/screens/settings_screen.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -9,7 +7,6 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       backgroundColor: Colors.black54,
       child: SingleChildScrollView(
@@ -45,7 +42,7 @@ class MyDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 2),
                 child: DrawerItem(
-                    name:'Profile',
+                    name: 'Profile',
                     icon: Icons.person_rounded,
                     onPressd: () => onItemPressed(context, index: 2)),
               ),
@@ -107,27 +104,22 @@ class MyDrawer extends StatelessWidget {
     Navigator.pop(context);
     switch (index) {
       case 0:
-
         break;
       case 1:
-
         break;
 
       case 2:
-
         break;
       case 3:
-
         break;
       case 4:
-
         break;
       case 5:
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => SettingScreen()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SettingScreen()));
         break;
       case 6:
-      //todo share link app
+        //todo share link app
         //Share.share('www.google.com');
         break;
       case 7:
@@ -149,8 +141,8 @@ class MyDrawer extends StatelessWidget {
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/img_rectangle163_2.png',
-                  ))),
+            'assets/images/img_rectangle163_2.png',
+          ))),
         ),
         SizedBox(
           height: 20,

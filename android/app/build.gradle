@@ -23,18 +23,17 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.time_status"
-    compileSdkVersion 34
-    ndkVersion "25.1.8937393"
-//    flutter.ndkVersion
+    namespace "com.example.myclone"
+    compileSdk flutter.compileSdkVersion
+    ndkVersion "26.3.11579264"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -43,10 +42,10 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.time_status"
+        applicationId "com.example.myclone"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 22
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
