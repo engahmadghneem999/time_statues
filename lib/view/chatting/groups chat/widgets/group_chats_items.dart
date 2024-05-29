@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:time_status/view/chatting/groups%20chat/screens/group_chats/widgets/in_group_chat.dart';
+import 'package:time_status/view/chatting/groups%20chat/widgets/in_group_chat.dart';
 
-import '../../../model/groups_get_chats_moderl.dart';
+import '../model/groups_get_chats_moderl.dart';
 
 
-class ChatsItemWidget extends StatelessWidget {
+class GroupChatsItemWidget extends StatelessWidget {
   final GetGroupsChatsModel item;
 
-  const ChatsItemWidget({
+  const GroupChatsItemWidget({
     Key? key,
     required this.item,
   }) : super(key: key);

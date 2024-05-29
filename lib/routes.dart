@@ -1,7 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:time_status/core/constant/routes.dart';
-import 'package:time_status/view/chatting/groups%20chat/screens/group_chats/groups_screen.dart';
+import 'package:time_status/view/chatting/groups%20chat/screens/groups_screen.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
 import 'package:time_status/view/login/binding/login_binding.dart';
 import 'package:time_status/view/map/screen/mapscreen.dart';

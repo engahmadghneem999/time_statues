@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/groups_controller.dart';
+import '../controller/groups_controller.dart';
 
 class InGroupChatScreen extends StatelessWidget {
   final int chatId;

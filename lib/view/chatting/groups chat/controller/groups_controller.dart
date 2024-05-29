@@ -14,11 +14,11 @@ class GroupChatController extends GetxController {
 
   @override
   void onInit() {
-    fetchChatMessages();
+    fetchGroupChatMessages();
     super.onInit();
   }
 
-  Future<void> fetchChatMessages() async {
+  Future<void> fetchGroupChatMessages() async {
     try {
       var isLoading = true.obs;
       var url = Uri.parse(AppLink.getGroupsChats);

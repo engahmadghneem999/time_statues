@@ -1,35 +1,40 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:time_status/core/constant/color.dart';
-import 'package:time_status/view/chatting/one%20to%20one%20chat/controller/chat_controller.dart';
-import 'package:time_status/view/favorites/screens/favorites_screen.dart';
-import '../../../../../data/model/Message.dart';
-import 'package:audioplayers/audioplayers.dart';
-import '../../controller/send_message_controller.dart';
-import 'controller/favorite_message_controller.dart';
-import 'controller/pin_message_controller.dart';
-import 'widgets/show_message_options.dart';
+import 'package:time_status/data/model/Message.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/controller/chat_controller.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/favorite_message_controller.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/pin_message_controller.dart';
 
-class ChatInnerScreen extends StatefulWidget {
-  const ChatInnerScreen({
+import '../../../../../../core/constant/color.dart';
+import '../../../../../favorites/screens/favorites_screen.dart';
+import '../../../../../splash/screen/widgets/custom_text.dart';
+import '../../../controller/send_message_controller.dart';
+import '../controller/get_pin_controller.dart';
+import '../widgets/show_message_options.dart';
+
+class InChatScreen extends StatefulWidget {
+  const InChatScreen({
     Key? key,
-    this.userId,
+    required this.userId,
+    required this.userName,
   }) : super(key: key);
-  final String? userId;
 
+  final String userId;
+  final String userName;
   @override
-  State<ChatInnerScreen> createState() => _ChatInnerScreenState();
+  State<InChatScreen> createState() => _ChatInnerScreenState();
 }
 
-class _ChatInnerScreenState extends State<ChatInnerScreen> {
+class _ChatInnerScreenState extends State<InChatScreen> {
   List<Message> FavMessages = [];
-
   Map<String, List<Message>> categoryMessages = {};
-
   late AudioPlayer _audioPlayer;
-
-  final controller1 = Get.put(ChatController());
+  final chatController = Get.put(MainOneToOneChatController());
+  final GetPinMessageController getPinMessageController =
+      Get.put(GetPinMessageController());
 
   final PinMessageController pinMessageController =
       Get.put(PinMessageController());
@@ -38,7 +43,7 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
 
   @override
   void initState() {
-    controller1.fetchDetailChats(controller1.idUser);
+    chatController.fetchDetailChats(chatController.idUser);
 
     _audioPlayer = AudioPlayer();
     // TODO: implement initState
@@ -64,7 +69,7 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
             const SizedBox(
               width: 10,
             ),
-            const Text("admin"),
+            Text("${widget.userName}, "),
           ],
         ),
         actions: [
@@ -81,8 +86,8 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
               : Container()
         ],
       ),
-      body: GetBuilder<ChatController>(
-          init: ChatController(),
+      body: GetBuilder<MainOneToOneChatController>(
+          init: MainOneToOneChatController(),
           builder: (controller) {
             List allMessages = controller.chatMessages;
             List<Message> sorted = sortedMessages(allMessages, widget.userId);
@@ -90,37 +95,59 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
             controller.idUser = widget.userId;
 
             // print("iduser=${controller.idUser}");
-
+            List<Message> pinnedMessages =
+                sorted.where((message) => message.isPin!).toList();
+            sorted.removeWhere((message) => message.isPin!);
             return Column(
               children: <Widget>[
+                ///chat body
                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (int index = 0; index < FavMessages.length; index++)
-                        Container(
-                          margin: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Align(
+                          alignment: Alignment.topLeft,
                           child: Row(
                             children: [
-                              BubbleSpecialOne(
-                                text: FavMessages[index].text!,
-                                color: const Color(0xFFE8E8EE),
+                              CustomText(
+                                text: 'Pinned messages :'.tr,
+                                fontSize: 15,
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.lock_clock),
-                                onPressed: () {
-                                  _removepinMessage(FavMessages[index]);
-                                  // _pinMessage(message);
-                                },
-                              )
+                              CustomText(
+                                text: pinnedMessages.length.toString(),
+                                fontSize: 15,
+                              ),
                             ],
                           ),
                         ),
+                      ),
+                      Container(
+                        height: 50.h,
+                        child: pinnedMessages.any(
+                                (pinnedMessage) => pinnedMessage.isPin == true)
+                            ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: pinnedMessages.length,
+                                itemBuilder: (context, index) {
+                                  final pinnedMessage = pinnedMessages[index];
+                                  return Container(
+                                    width: 210.w,
+                                    margin: EdgeInsets.all(10),
+                                    color: Colors.grey[300],
+                                    child: Center(
+                                      child: Text(pinnedMessage.text ?? ''),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(), // Return an empty container if there are no pinned messages
+                      ),
                     ],
                   ),
-                ),
-
-                ///chat body
+                )),
                 Expanded(
                   child: ListView.builder(
                     itemCount: sorted.length, // Use sorted list here
@@ -312,12 +339,12 @@ class _ChatInnerScreenState extends State<ChatInnerScreen> {
       categoryMessages[category]!.add(message);
     });
   }
-
-  void _removepinMessage(Message message) {
-    setState(() {
-      // pinMessageController.remove(message);
-    });
-  }
+//! TODO Waiting for the api method
+//   void _removepinMessage(Message message) {
+//   setState(() {
+//     pinMessageController.remove(message);
+//   });
+// }
 }
 
 bool _isRecording = false;

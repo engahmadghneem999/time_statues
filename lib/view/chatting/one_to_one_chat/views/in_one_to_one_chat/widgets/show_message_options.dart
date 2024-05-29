@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/data/model/Message.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/favorite_message_controller.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/pin_message_controller.dart';
 
 import '../../../../../splash/screen/widgets/custom_text.dart';
-import '../controller/favorite_message_controller.dart';
-import '../controller/pin_message_controller.dart';
 
 void showMessageOptions(
     Message message, BuildContext context, Offset tapPosition) async {

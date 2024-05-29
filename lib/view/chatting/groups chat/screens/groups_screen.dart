@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:time_status/core/app_export.dart';
-import '../../controller/groups_controller.dart';
-import 'widgets/group_chats_items.dart';
+import '../controller/groups_controller.dart';
+import '../widgets/group_chats_items.dart';
 
 class GroupChatsScreen extends StatelessWidget {
   const GroupChatsScreen({Key? key}) : super(key: key);
@@ -197,7 +197,7 @@ class GroupChatsScreen extends StatelessWidget {
                   itemCount: controller.chatMessages.length,
                   itemBuilder: (context, index) {
                     final item = controller.chatMessages[index];
-                    return ChatsItemWidget(item: item);
+                    return GroupChatsItemWidget(item: item);
                   },
                 );
               }

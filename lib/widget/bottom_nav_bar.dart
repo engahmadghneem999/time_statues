@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_status/core/app_export.dart';
-import 'package:time_status/view/chatting/one%20to%20one%20chat/views/main_chat_screen/main_chat_screen.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/main_chat_screen/main_chat_screen.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
 import 'package:time_status/view/map/screen/mapscreen.dart';
 import 'package:time_status/view/mytasks/screens/team_screen.dart';

@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:time_status/core/service/link.dart';
 import 'package:time_status/core/service/service.dart';
 
-class FavMessageController extends GetxController {
+class GetFavMessageController extends GetxController {
   MyServices myServices = Get.find<MyServices>();
 
-  Future<void> favMessage(int id) async {
+  Future<void> pinMessage(int id) async {
     String? token = myServices.getToken();
     if (token == null) {
       print("Token not found");
@@ -19,7 +19,7 @@ class FavMessageController extends GetxController {
       print('token okay');
 
     var response = await http.post(
-      Uri.parse(AppLink.favMessage(id)),
+      Uri.parse(AppLink.pinMessage(id)),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -30,9 +30,9 @@ class FavMessageController extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      print("Message Fav-ed Successfully");
+      print("Message Pinned Successfully");
       print("Response: ${response.body}");
-      Get.snackbar("Success", "Message fav_ed successfully",
+      Get.snackbar("Success", "Message pinned successfully",
           backgroundColor: Colors.white);
     } else {
       print("Error: ${response.statusCode}");

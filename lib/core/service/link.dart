@@ -9,10 +9,16 @@ class AppLink {
   //User Info GETS
   static String getUserData = "$serverApiRoot/User/me";
   //One to One Chats
+
   //Messages pin and fav POSTS
   static String pinMessage(int id) => "$serverApiRoot/Chat/PinMessage/$id";
   static String favMessage(int id) =>
       "$serverApiRoot/Chat/FavouriteMessage/$id";
+  // fav and pinned GET
+  static String getfavMessage(int id) =>
+      "$serverApiRoot/Chat/GetFavouriteMessages/$id";
+  static String getpinedMessage(int id) =>
+      "$serverApiRoot/Chat/GetPinMessages/$id";
   //AUTH LINKS
   static String login = "$serverApiRoot/User/Login";
   static String register = "$serverApiRoot/User/register";
