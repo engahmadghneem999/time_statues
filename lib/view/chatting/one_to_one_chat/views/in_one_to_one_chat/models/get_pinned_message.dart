@@ -1,28 +1,40 @@
-class GetPinnedModel {
-  final String id;
-  final String text;
+class PinnedMessage {
+  final int id;
   final String sender;
-  final String? dateTime;
-  final bool? isPin;
-  final bool? isSeen;
+  final String receiver;
+  final String text;
+  final String imageUrl;
+  final String audioUrl;
+  final bool isSeen;
+  final bool favourite;
+  final bool isPin;
+  final DateTime dateTime;
 
-  GetPinnedModel({
+  PinnedMessage({
     required this.id,
-    required this.text,
     required this.sender,
-    this.dateTime,
-    this.isPin,
-    this.isSeen,
+    required this.receiver,
+    required this.text,
+    required this.imageUrl,
+    required this.audioUrl,
+    required this.isSeen,
+    required this.favourite,
+    required this.isPin,
+    required this.dateTime,
   });
 
-  factory GetPinnedModel.fromJson(Map<String, dynamic> json) {
-    return GetPinnedModel(
+  factory PinnedMessage.fromJson(Map<String, dynamic> json) {
+    return PinnedMessage(
       id: json['id'],
-      text: json['text'],
       sender: json['sender'],
-      dateTime: json['dateTime'],
-      isPin: json['isPin'],
+      receiver: json['receiver'],
+      text: json['text'],
+      imageUrl: json['imageUrl'],
+      audioUrl: json['audioUrl'],
       isSeen: json['isSeen'],
+      favourite: json['favourite'],
+      isPin: json['isPin'],
+      dateTime: DateTime.parse(json['dateTime']),
     );
   }
 }

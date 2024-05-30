@@ -2,42 +2,47 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:time_status/core/service/link.dart';
 import 'package:time_status/core/service/service.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/models/get_fav_messages.dart';
 
-class GetFavMessageController extends GetxController {
+class FavoriteMessageController extends GetxController {
   MyServices myServices = Get.find<MyServices>();
+  var favoriteMessages = <GetFavedModel>[].obs;
+  var isLoading = false.obs;
 
-  Future<void> pinMessage(int id) async {
+  Future<void> fetchFavoriteMessages(String userId) async {
     String? token = myServices.getToken();
     if (token == null) {
       print("Token not found");
       Get.snackbar("Error", "Authentication token not found",
           backgroundColor: Colors.white);
       return;
-    } else
-      print('token okay');
-
-    var response = await http.post(
-      Uri.parse(AppLink.pinMessage(id)),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': 'Bearer $token',
-      },
-      body: json.encode({}), // Assuming the API expects an empty body
-    );
-
-    if (response.statusCode == 200) {
-      print("Message Pinned Successfully");
-      print("Response: ${response.body}");
-      Get.snackbar("Success", "Message pinned successfully",
-          backgroundColor: Colors.white);
     } else {
-      print("Error: ${response.statusCode}");
-      Get.snackbar("Error", "Something went wrong",
-          backgroundColor: Colors.white);
+      print('Token okay');
+    }
+
+    try {
+      isLoading(true);
+      var response = await http.get(
+        Uri.parse('http://algor.somee.com/api/Chat/GetFavouriteMessages/$userId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        favoriteMessages.value = body.map((item) => GetFavedModel.fromJson(item)).toList();
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error: $e");
+    } finally {
+      isLoading(false);
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:time_status/core/service/service.dart';
 class PinMessageController extends GetxController {
   MyServices myServices = Get.find<MyServices>();
 
-  Future<void> pinMessage(int id) async {
+  Future<void> pinMessage(String id) async {
     String? token = myServices.getToken();
     if (token == null) {
       print("Token not found");

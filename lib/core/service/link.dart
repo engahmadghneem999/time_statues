@@ -21,7 +21,7 @@ class AppLink {
   // fav and pinned GET
   static String getfavMessage(int id) =>
       "$serverApiRoot/Chat/GetFavouriteMessages/$id";
-  static String getpinedMessage(int id) =>
+  static String getpinedMessage(String id) =>
       "$serverApiRoot/Chat/GetPinMessages/$id";
   //AUTH LINKS
   static String login = "$serverApiRoot/User/Login";
