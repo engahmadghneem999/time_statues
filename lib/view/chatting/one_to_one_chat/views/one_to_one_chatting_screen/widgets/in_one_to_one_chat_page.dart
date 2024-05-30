@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/controller/send_message_controller.dart';
-import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/get_fav_controler.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/get_pin_controller.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/pin_message_controller.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/controller/in_one_to_one_contoller.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/favorite_message_controller.dart';
 import 'package:intl/intl.dart';
@@ -21,8 +21,10 @@ class InChatScreen extends StatelessWidget {
       Get.put(SendMessageController());
   final GetPinMessageController getPinMessageController =
       Get.put(GetPinMessageController());
-  final PostFavoriteMessageController favoriteMessageController =
+  final PostFavoriteMessageController getFavoriteMessageController =
       Get.put(PostFavoriteMessageController());
+  final PostPinMessageController postPinMessageController =
+      Get.put(PostPinMessageController());
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +55,13 @@ class InChatScreen extends StatelessWidget {
                 color: Colors.grey[200],
                 child: Column(
                   children: [
-                    SizedBox(width: 10),
+                    SizedBox(height: 10),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Icon(Icons.push_pin),
                         Text(
-                          'Pinned messages :',
+                          'Pinned messages:',
                           style: TextStyle(fontSize: 15),
                         ),
                         Container(
@@ -72,14 +76,10 @@ class InChatScreen extends StatelessWidget {
                                   getPinMessageController.pinnedMessages[index];
                               return Row(
                                 children: [
-                                  SizedBox(
-                                    width: 10,
-                                  ),
+                                  SizedBox(width: 10),
                                   Text(
-                                    pinnedMessage.text,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                    ),
+                                    pinnedMessage.text ?? '',
+                                    style: TextStyle(fontSize: 15),
                                   ),
                                 ],
                               );
@@ -88,9 +88,7 @@ class InChatScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Divider(
-                      color: AppColor.appbargreen,
-                    )
+                    Divider(color: AppColor.appbargreen),
                   ],
                 ),
               );
@@ -98,9 +96,7 @@ class InChatScreen extends StatelessWidget {
           }),
           Expanded(
             child: Obx(() {
-              if (chatController.isLoading.value) {
-                return Center(child: CircularProgressIndicator());
-              } else if (chatController.chatMessages.isEmpty) {
+              if (chatController.chatMessages.isEmpty) {
                 return Center(child: Text('No messages'));
               } else {
                 return ListView.builder(
@@ -126,13 +122,25 @@ class InChatScreen extends StatelessWidget {
                                       leading: Icon(Icons.favorite),
                                       title: Text('Add to favorites'),
                                       onTap: () {
-                                        favoriteMessageController
+                                        getFavoriteMessageController
                                             .favoriteMessage(
                                                 message.id.toString());
                                         Navigator.pop(context);
                                       },
                                     ),
-                                    // Add more options here if needed
+                                    ListTile(
+                                      leading: Icon(Icons.push_pin),
+                                      title: Text('Pin message'),
+                                      onTap: () {
+                                        postPinMessageController
+                                            .pinMessage(message.id.toString())
+                                            .then((_) {
+                                          getPinMessageController
+                                              .fetchPinnedMessages(userId);
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                    ),
                                   ],
                                 );
                               },
