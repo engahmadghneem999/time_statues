@@ -4,30 +4,28 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:time_status/core/service/link.dart';
 import 'package:time_status/data/model/Message.dart';
-import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/model/get_chats_model.dart';
 import '../../../../../../core/constant/shared_preferences_keys.dart';
 import '../../../../../../core/service/service.dart';
 
-class OneToOneChatMainScreenController extends GetxController {
-  String? idUser = '';
+class InOneToOneChatController extends GetxController {
+  MyServices myServices = Get.find();
+  var isLoading = false.obs;
+  var chatMessages = <Message>[].obs;
+
+  TextEditingController textController = TextEditingController();
+
   @override
   void onInit() {
-    fetchOnetoOneMainChats();
     super.onInit();
   }
 
-  MyServices myServices = Get.find();
-  List ChatsList = [];
-  bool isLoading = false;
-  List<dynamic> chatMessages = [];
-  TextEditingController textController = TextEditingController();
-  Future<void> fetchOnetoOneMainChats() async {
+  Future<void> fetchDetailChats(String id) async {
+    isLoading(true);
     try {
-      isLoading = true;
-      var url = Uri.parse(AppLink.getOneToOneChats);
-      print(url);
+      var url = Uri.parse(AppLink.getInOneToOneChats(id));
       var token = myServices.sharedPreferences
           .getString(SharedPreferencesKeys.tokenKey);
+
       final response = await http.get(
         url,
         headers: {
@@ -38,21 +36,18 @@ class OneToOneChatMainScreenController extends GetxController {
         },
       );
 
-      var responseDecode = json.decode(response.body);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        ChatsList = responseDecode.map((e) => getchats.fromJson(e)).toList();
-
-        isLoading = false;
-        print(response.statusCode);
-        print("20000000000000 donnnnnnnnne");
-        update();
+      if (response.statusCode == 200) {
+        List<Message> fetchedMessages = (json.decode(response.body) as List)
+            .map((data) => Message.fromJson(data))
+            .toList();
+        chatMessages.assignAll(fetchedMessages);
       } else {
         print("Error: ${response.statusCode}");
       }
     } catch (error) {
       print("Error catch: $error");
+    } finally {
+      isLoading(false);
     }
-    update();
   }
 }

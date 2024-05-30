@@ -11,7 +11,7 @@ class MainOneToOneChatController extends GetxController {
   String? idUser = '';
   @override
   void onInit() {
-    fetchDetailChats(idUser);
+    fetchMyChats();
     super.onInit();
   }
 
@@ -25,7 +25,7 @@ class MainOneToOneChatController extends GetxController {
   Function get selectImage => _selectImage;
 //! GET THE MAIN CHAT ITEMS
 
-  Future<void> fetchDetailChats(String? idUs) async {
+  Future<void> fetchMyChats() async {
     try {
       isLoading = true;
 
