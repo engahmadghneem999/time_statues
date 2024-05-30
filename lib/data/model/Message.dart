@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class Message {
   int? id;
   String? sender;

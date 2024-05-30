@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:time_status/core/service/link.dart';
-import 'package:time_status/data/model/Message.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/model/get_chats_model.dart';
 import '../../../../../../core/constant/shared_preferences_keys.dart';
 import '../../../../../../core/service/service.dart';

@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_status/core/constant/color.dart';
-import 'package:time_status/data/model/Message.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/controller/one_to_one_main_screen_controller.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'dart:convert';
-
-import 'package:time_status/core/constant/shared_preferences_keys.dart';
-import 'package:time_status/core/service/service.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/in_one_to_one_chat_page.dart';
 
 class OneToOneChatItem extends StatelessWidget {
