@@ -42,6 +42,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
@@ -132,10 +133,9 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         color: Colors.transparent,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
           child: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -253,10 +253,8 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: false,
             showUnselectedLabels: false,
-
             enableFeedback: false,
-            selectedItemColor:
-                AppColor.oranegapp, // Set the selected item color to orange
+            selectedItemColor: AppColor.oranegapp,
           ),
         ),
       ),

@@ -93,7 +93,7 @@ void setLoading(bool value) {
             .setBool(SharedPreferencesKeys.isLoginKey, true);
 
         Get.offAll(
-          () => const CustomBottomNavigationBar(),
+          () =>  CustomBottomNavigationBar(),
         );
       } else {
         Get.to(

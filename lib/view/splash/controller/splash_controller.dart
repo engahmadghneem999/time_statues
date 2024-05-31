@@ -27,7 +27,7 @@ class SplashController extends GetxController {
         if (myServices.sharedPreferences
                 .getBool(SharedPreferencesKeys.isLoginKey) ==
             true) {
-          Get.to(const CustomBottomNavigationBar());
+          Get.to( CustomBottomNavigationBar());
         } else {
           Get.toNamed(AppRoute.logIn);
         }

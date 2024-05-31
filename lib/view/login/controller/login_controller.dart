@@ -91,7 +91,7 @@ class LoginController extends GetxController {
         print(response.statusCode);
 
         Get.offAll(
-          () => const CustomBottomNavigationBar(),
+          () => CustomBottomNavigationBar(),
         );
         isLoading = false;
         update();
