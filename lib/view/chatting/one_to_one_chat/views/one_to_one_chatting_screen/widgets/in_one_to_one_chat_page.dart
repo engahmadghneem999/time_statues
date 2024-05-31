@@ -9,12 +9,17 @@ import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_ch
 import 'package:intl/intl.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/favorite_messages.dart';
 
-class InChatScreen extends StatelessWidget {
+class InChatScreen extends StatefulWidget {
   final String userId;
   final String userName;
 
   InChatScreen({required this.userId, required this.userName});
 
+  @override
+  _InChatScreenState createState() => _InChatScreenState();
+}
+
+class _InChatScreenState extends State<InChatScreen> {
   final InOneToOneChatController chatController =
       Get.put(InOneToOneChatController());
   final SendMessageController sendMessageController =
@@ -27,21 +32,37 @@ class InChatScreen extends StatelessWidget {
       Get.put(PostPinMessageController());
 
   @override
-  Widget build(BuildContext context) {
-    chatController.fetchDetailChats(userId);
-    getPinMessageController.fetchPinnedMessages(userId);
+  void initState() {
+    super.initState();
+    chatController.fetchDetailChats(widget.userId);
+    getPinMessageController.fetchPinnedMessages(widget.userId);
+    sendMessageController.textController.addListener(_updateButtonState);
+  }
 
+  @override
+  void dispose() {
+    sendMessageController.textController.removeListener(_updateButtonState);
+    sendMessageController.textController.dispose();
+    super.dispose();
+  }
+
+  void _updateButtonState() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             icon: Icon(Icons.favorite_border),
             onPressed: () {
-              Get.to(FavoriteMessageScreen(userId: userId));
+              Get.to(FavoriteMessageScreen(userId: widget.userId));
             },
           ),
         ],
-        title: Text(userName),
+        title: Text(widget.userName),
         backgroundColor: AppColor.appbargreen,
       ),
       body: Column(
@@ -104,7 +125,7 @@ class InChatScreen extends StatelessWidget {
                   itemCount: chatController.chatMessages.length,
                   itemBuilder: (context, index) {
                     final message = chatController.chatMessages[index];
-                    final isMe = message.sender == userId;
+                    final isMe = message.sender == widget.userId;
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -136,7 +157,8 @@ class InChatScreen extends StatelessWidget {
                                             .pinMessage(message.id.toString())
                                             .then((_) {
                                           getPinMessageController
-                                              .fetchPinnedMessages(userId);
+                                              .fetchPinnedMessages(
+                                                  widget.userId);
                                         });
                                         Navigator.pop(context);
                                       },
@@ -211,14 +233,22 @@ class InChatScreen extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: AppColor.appbargreen),
-                  onPressed: () {
-                    sendMessageController
-                        .sendMessage(receiver: userId)
-                        .then((_) {
-                      chatController.fetchDetailChats(userId);
-                    });
-                  },
+                  icon: Icon(
+                    Icons.send,
+                    color: sendMessageController.textController.text.isNotEmpty
+                        ? AppColor.appbargreen
+                        : Colors.black,
+                  ),
+                  onPressed:
+                      sendMessageController.textController.text.isNotEmpty
+                          ? () {
+                              sendMessageController
+                                  .sendMessage(receiver: widget.userId)
+                                  .then((_) {
+                                chatController.fetchDetailChats(widget.userId);
+                              });
+                            }
+                          : null,
                 ),
               ],
             ),
