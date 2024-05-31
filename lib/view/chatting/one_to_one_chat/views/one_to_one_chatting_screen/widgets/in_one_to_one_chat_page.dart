@@ -8,6 +8,7 @@ import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatt
 import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/favorite_message_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/favorite_messages.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/pinned_messages_section.dart';
 
 class InChatScreen extends StatefulWidget {
   final String userId;
@@ -68,53 +69,8 @@ class _InChatScreenState extends State<InChatScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Obx(() {
-            if (getPinMessageController.pinnedMessages.isEmpty) {
-              return Container();
-            } else {
-              return Container(
-                color: Colors.grey[200],
-                child: Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.push_pin),
-                        Text(
-                          'Pinned messages:',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Container(
-                          height: 30,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount:
-                                getPinMessageController.pinnedMessages.length,
-                            itemBuilder: (context, index) {
-                              final pinnedMessage =
-                                  getPinMessageController.pinnedMessages[index];
-                              return Row(
-                                children: [
-                                  SizedBox(width: 10),
-                                  Text(
-                                    pinnedMessage.text ?? '',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(color: AppColor.appbargreen),
-                  ],
-                ),
-              );
-            }
-          }),
+          PinnedMessagesSection(
+              getPinMessageController: getPinMessageController),
           Expanded(
             child: Obx(() {
               if (chatController.chatMessages.isEmpty) {

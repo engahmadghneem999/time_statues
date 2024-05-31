@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_status/core/app_export.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_chat/controller/get_fav_controler.dart';
-import 'package:intl/intl.dart';
 
 class FavoriteMessageScreen extends StatelessWidget {
   final String userId;
