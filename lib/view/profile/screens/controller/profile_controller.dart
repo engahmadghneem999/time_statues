@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:time_status/core/service/service.dart';
@@ -8,6 +9,7 @@ import '../../../../core/service/link.dart';
 class ProfileController extends GetxController {
   var isLoading = false.obs;
   var username = ''.obs;
+  RxInt followersCount = 0.obs;
 
   @override
   void onInit() {
@@ -56,6 +58,31 @@ class ProfileController extends GetxController {
       print("Error: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchFollowersCount() async {
+    String? token = myServices.getToken();
+    if (token == null) {
+      Get.snackbar("Error", "Authentication token not found",
+          backgroundColor: Colors.white);
+      return;
+    }
+
+    var response = await http.get(
+      Uri.parse("http://algor.somee.com/api/User/GetAllFollowers"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      followersCount.value = data.length;
+      print("Followers count retrieved successfully");
+    } else {
+      Get.snackbar("Error", "Failed to fetch followers count",
+          backgroundColor: Colors.white);
     }
   }
 }

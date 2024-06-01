@@ -1,25 +1,32 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_status/core/app_export.dart';
 import 'package:time_status/core/utils/spacing.dart';
+import 'package:time_status/view/profile/screens/My_Followers/view/my_followers_screen.dart';
+import 'package:time_status/view/profile/screens/My_Followings/view/my_followings_screen.dart';
+import 'package:time_status/view/profile/screens/widgets/options_section.dart';
+import 'package:time_status/view/profile/screens/widgets/statastics.dart';
 import 'package:time_status/widget/loading.dart';
 import '../../../widget/drawer.dart';
 import 'controller/profile_controller.dart';
-import 'widgets/options_section.dart';
-import 'widgets/statastics.dart';
+import 'My_Followings/controller/my_followings_controller.dart'; // Adjust the import path as needed
 
-// ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   final ProfileController profileController = Get.put(ProfileController());
+  final MyFollowingsController followingsController =
+      Get.put(MyFollowingsController());
 
   int postLen = 0;
-  int followers = 0;
-  int following = 0;
 
   ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    followingsController.fetchFollowings(); // Fetch followings on screen load
+    profileController
+        .fetchFollowersCount(); // Fetch followers count on screen load
+
     return Obx(() {
       return LoadingManager(
         isLoading: profileController.isLoading.value,
@@ -64,26 +71,28 @@ class ProfileScreen extends StatelessWidget {
                         );
                       }),
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(top: 10),
-                      child: const Text(
-                        'I work hard',
-                        style: TextStyle(
-                            color: AppColor.appgreen,
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ),
                     const SizedBox(height: 20),
                     Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          buildStatesColumn(postLen, 'posts'),
-                          buildStatesColumn(followers, 'followers'),
-                          buildStatesColumn(following, 'following'),
+                          GestureDetector(
+                              child: buildStatesColumn(postLen, 'posts')),
+                          GestureDetector(
+                              onTap: () => Get.to(FollowersScreen()),
+                              child: Obx(() {
+                                return buildStatesColumn(
+                                    profileController.followersCount.value,
+                                    'followers');
+                              })),
+                          GestureDetector(
+                              onTap: () => Get.to(FollowingsScreen()),
+                              child: Obx(() {
+                                return buildStatesColumn(
+                                    followingsController.followingsCount,
+                                    'following');
+                              })),
                         ],
                       ),
                     ),
@@ -132,5 +141,3 @@ class ProfileScreen extends StatelessWidget {
     });
   }
 }
-
-

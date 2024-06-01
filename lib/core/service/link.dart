@@ -6,8 +6,15 @@ class AppLink {
   static String serverApiRoot = "$appRoot/api";
   //Home screen graph
   static String graphData = "$serverApiRoot/GraphData/";
-  //User Info GETS
+  //User PROFILE
   static String getUserData = "$serverApiRoot/User/me";
+  static String getAllFollowings = "$serverApiRoot/User/GetAllFollowings";
+  //My followings screen
+  static String followUser(String id) => "$serverApiRoot/User/FollowUser/$id";
+  static String unFollowUser(String id) =>
+      "$serverApiRoot/User/UnFollowUser/$id";
+  //My followers screen
+  static String getAllFollowers = "$serverApiRoot/User/GetAllFollowers";
   //One to One Chats
   //GET chats
   static String getOneToOneChats = "$serverApiRoot/Chat/ChatPage";
