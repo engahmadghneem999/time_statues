@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:time_status/core/constant/shared_preferences_keys.dart';
 import 'package:time_status/core/service/service.dart';
 import 'package:time_status/core/constant/constant_data.dart';
-import '../../core/service/link.dart';
+import '../../../core/service/link.dart';
 import '../view/register_screen.dart';
-import '../../../widget/bottom_nav_bar.dart';
+import '../../../../widget/bottom_nav_bar.dart';
 
 class RegisterController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();

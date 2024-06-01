@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:time_status/core/constant/color.dart';
 import 'package:time_status/core/constant/image_assets.dart';
-import 'package:time_status/register/view/register_screen.dart';
+import 'package:time_status/view/register/view/register_screen.dart';
 import 'package:time_status/view/login/screen/widget/change_lang_bottom_sheet.dart';
 import 'package:time_status/widget/custom_button.dart';
 import 'package:time_status/widget/custom_text_form_filed.dart';
@@ -43,8 +44,8 @@ class LoginScreen extends StatelessWidget {
             children: [
               Lottie.asset(
                 AppImageAsset.login,
-                width: 200,
-                height: 200,
+                width: 150.w,
+                height: 150.h,
               ),
               const SizedBox(
                 height: 50,

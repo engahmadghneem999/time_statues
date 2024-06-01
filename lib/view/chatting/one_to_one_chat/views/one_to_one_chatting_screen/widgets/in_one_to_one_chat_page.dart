@@ -9,6 +9,7 @@ import 'package:time_status/view/chatting/one_to_one_chat/views/in_one_to_one_ch
 import 'package:intl/intl.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/favorite_messages.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/pinned_messages_section.dart';
+import 'dart:async'; // Import this for using Timer
 
 class InChatScreen extends StatefulWidget {
   final String userId;
@@ -32,23 +33,41 @@ class _InChatScreenState extends State<InChatScreen> {
   final PostPinMessageController postPinMessageController =
       Get.put(PostPinMessageController());
 
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
     chatController.fetchDetailChats(widget.userId);
     getPinMessageController.fetchPinnedMessages(widget.userId);
     sendMessageController.textController.addListener(_updateButtonState);
+
+    // Start polling for new messages
+    _startPolling();
   }
 
   @override
   void dispose() {
     sendMessageController.textController.removeListener(_updateButtonState);
     sendMessageController.textController.dispose();
+
+    // Cancel the timer when the screen is disposed
+    _stopPolling();
     super.dispose();
   }
 
   void _updateButtonState() {
     setState(() {});
+  }
+
+  void _startPolling() {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      chatController.fetchDetailChats(widget.userId);
+    });
+  }
+
+  void _stopPolling() {
+    _timer?.cancel();
   }
 
   @override
@@ -84,10 +103,10 @@ class _InChatScreenState extends State<InChatScreen> {
                     final isMe = message.sender == widget.userId;
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Align(
                         alignment:
-                            isMe ? Alignment.centerLeft : Alignment.centerRight,
+                            isMe ? Alignment.centerRight : Alignment.centerLeft,
                         child: GestureDetector(
                           onLongPress: () {
                             showModalBottomSheet(
@@ -97,7 +116,7 @@ class _InChatScreenState extends State<InChatScreen> {
                                   children: [
                                     ListTile(
                                       leading: Icon(Icons.favorite),
-                                      title: Text('Add to favorites'),
+                                      title: Text('Add to favorites'.tr),
                                       onTap: () {
                                         getFavoriteMessageController
                                             .favoriteMessage(
@@ -107,7 +126,7 @@ class _InChatScreenState extends State<InChatScreen> {
                                     ),
                                     ListTile(
                                       leading: Icon(Icons.push_pin),
-                                      title: Text('Pin message'),
+                                      title: Text('Pin message'.tr),
                                       onTap: () {
                                         postPinMessageController
                                             .pinMessage(message.id.toString())
@@ -125,11 +144,13 @@ class _InChatScreenState extends State<InChatScreen> {
                             );
                           },
                           child: Container(
-                            constraints: BoxConstraints(maxWidth: 250),
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.75),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isMe ? Colors.blue : Colors.grey.shade200,
+                              color: isMe ? Colors.green : Colors.grey.shade200,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
@@ -167,7 +188,7 @@ class _InChatScreenState extends State<InChatScreen> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.image, color: AppColor.appbargreen),
+                  icon: Icon(Icons.attach_file, color: AppColor.appbargreen),
                   onPressed: () {
                     sendMessageController.selectImage();
                   },
@@ -176,7 +197,7 @@ class _InChatScreenState extends State<InChatScreen> {
                   child: TextField(
                     controller: sendMessageController.textController,
                     decoration: InputDecoration(
-                      hintText: 'Type a message',
+                      hintText: 'Type a message'.tr,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       filled: true,
@@ -200,9 +221,7 @@ class _InChatScreenState extends State<InChatScreen> {
                           ? () {
                               sendMessageController
                                   .sendMessage(receiver: widget.userId)
-                                  .then((_) {
-                                chatController.fetchDetailChats(widget.userId);
-                              });
+                                  .then((_) {});
                             }
                           : null,
                 ),

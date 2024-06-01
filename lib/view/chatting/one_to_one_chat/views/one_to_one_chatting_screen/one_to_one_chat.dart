@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/constant/color.dart';
 import 'package:get/get.dart';
+import 'package:time_status/view/chatting/one_to_one_chat/views/all_users/view/all_users_screen.dart';
+import '../../../../../../core/constant/color.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/controller/one_to_one_main_screen_controller.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/one_to_one_chatting_screen/widgets/in_one_to_one_chat_page.dart';
 
@@ -10,6 +11,14 @@ class OneToOneChats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the All Users page
+          Get.to(() => AllUsersPage());
+        },
+        child: Icon(Icons.group),
+        backgroundColor: AppColor.appColor, // Change color as needed
+      ),
       body: GetBuilder<OneToOneChatMainScreenController>(
         init: OneToOneChatMainScreenController(),
         builder: (controller) {
@@ -32,7 +41,8 @@ class OneToOneChats extends StatelessWidget {
                     String userId = chat.userId ?? "";
                     String userName = chat.userName ?? "";
                     Get.to(
-                        () => InChatScreen(userId: userId, userName: userName));
+                      () => InChatScreen(userId: userId, userName: userName),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
