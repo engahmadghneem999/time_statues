@@ -11,13 +11,12 @@ class OneToOneChats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to the All Users page
           Get.to(() => AllUsersPage());
         },
         child: Icon(Icons.group),
-        backgroundColor: AppColor.appColor, // Change color as needed
+        backgroundColor: AppColor.appColor,
       ),
       body: GetBuilder<OneToOneChatMainScreenController>(
         init: OneToOneChatMainScreenController(),

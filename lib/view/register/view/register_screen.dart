@@ -181,12 +181,12 @@ class RegisterScreen extends StatelessWidget {
                                   },
                                 ),
                                 const SizedBox(height: 15),
-                                CustomText(
-                                  text: "forget_password".tr,
-                                  color: AppColor.white,
-                                  fontSize: 11,
-                                  //    alignment: Alignment.centerLeft,
-                                ),
+                                // CustomText(
+                                //   text: "forget_password".tr,
+                                //   color: AppColor.white,
+                                //   fontSize: 11,
+                                //   //    alignment: Alignment.centerLeft,
+                                // ),
                                 const SizedBox(height: 15),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width,

@@ -48,7 +48,7 @@ class LoginScreen extends StatelessWidget {
                 height: 150.h,
               ),
               const SizedBox(
-                height: 50,
+                height: 20,
               ),
               const CustomText(
                 text: 'App Name',
@@ -56,7 +56,7 @@ class LoginScreen extends StatelessWidget {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height / 1.5,
                 margin: const EdgeInsets.only(top: 50),
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -73,183 +73,146 @@ class LoginScreen extends StatelessWidget {
                         isLoading: controller.isLoading,
                         child: Form(
                           key: formKey,
-                          child: SingleChildScrollView(
-                            child: Column(
-                                crossAxisAlignment:
-                                    _languageController.selectedLanguage ==
-                                            'en_US'
-                                        ? CrossAxisAlignment.start
-                                        : CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    _languageController.selectedLanguage ==
-                                            'en_US'
-                                        ? MainAxisAlignment.end
-                                        : MainAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: "login".tr,
-                                    color: AppColor.white,
-                                    fontSize: 19,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  CustomText(
-                                    text: "please_login".tr,
-                                    color: AppColor.white,
-                                    fontSize: 14,
-                                  ),
-                                  const SizedBox(height: 15),
-                                  CustomText(
-                                    text: "username".tr,
-                                    color: AppColor.white,
-                                    fontSize: 14,
-                                  ),
-                                  CustomTextForm(
-                                    hintText: "example".tr,
+                          child: Column(
+                              crossAxisAlignment:
+                                  _languageController.selectedLanguage ==
+                                          'en_US'
+                                      ? CrossAxisAlignment.start
+                                      : CrossAxisAlignment.end,
+                              mainAxisAlignment:
+                                  _languageController.selectedLanguage ==
+                                          'en_US'
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                  text: "login".tr,
+                                  color: AppColor.white,
+                                  fontSize: 19,
+                                ),
+                                const SizedBox(height: 5),
+                                CustomText(
+                                  text: "please_login".tr,
+                                  color: AppColor.white,
+                                  fontSize: 14,
+                                ),
+                                const SizedBox(height: 15),
+                                CustomText(
+                                  text: "username".tr,
+                                  color: AppColor.white,
+                                  fontSize: 14,
+                                ),
+                                CustomTextForm(
+                                  hintText: "example".tr,
+                                  keyboardType: TextInputType.text,
+                                  iconSuffixData: Icons.person_3_outlined,
+                                  iconSuffixColor: AppColor.white,
+                                  controller: controller.username,
+                                  valid: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'please_enter_username'.tr;
+                                    } else if (value.length < 3) {
+                                      return "Name less than 3 letters";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                CustomText(
+                                  text: "password".tr,
+                                  color: AppColor.white,
+                                  fontSize: 14,
+                                ),
+                                Obx(() {
+                                  return CustomTextForm(
+                                    obscuretext: false,
+                                    hintText: 'password'.tr,
                                     keyboardType: TextInputType.text,
-                                    iconSuffixData: Icons.person_3_outlined,
+                                    iconSuffixData: Icons.lock_outline,
+                                    iconPrefixData:
+                                        controller.isPasswordHidden.value
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                    iconPrefixColor: AppColor.white,
                                     iconSuffixColor: AppColor.white,
-                                    controller: controller.username,
+                                    controller: controller.password,
+                                    onTapPrefixIcon: () =>
+                                        controller.togglePasswordVisibility(),
                                     valid: (value) {
                                       if (value!.isEmpty) {
-                                        return 'please_enter_username'.tr;
-                                      } else if (value.length < 3) {
-                                        return "Name less than 3 letters";
+                                        return 'please_enter_password'.tr;
+                                      } else if (value.length < 5) {
+                                        return "Name less than 5 letters";
                                       }
                                       return null;
                                     },
-                                  ),
-                                  const SizedBox(height: 15),
-                                  CustomText(
-                                    text: "password".tr,
-                                    color: AppColor.white,
-                                    fontSize: 14,
-                                  ),
-                                  Obx(() {
-                                    return CustomTextForm(
-                                      obscuretext: false,
-                                      // controller.isPasswordHidden.value,
-                                      hintText: 'password'.tr,
-                                      keyboardType: TextInputType.text,
-                                      iconSuffixData: Icons.lock_outline,
-                                      iconPrefixData:
-                                          controller.isPasswordHidden.value
-                                              ? Icons.visibility_off_outlined
-                                              : Icons.visibility_outlined,
-                                      iconPrefixColor: AppColor.white,
-                                      iconSuffixColor: AppColor.white,
-                                      controller: controller.password,
-                                      onTapPrefixIcon: () =>
-                                          controller.togglePasswordVisibility(),
-                                      valid: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'please_enter_password'.tr;
-                                        } else if (value.length < 5) {
-                                          return "Name less than 5 letters";
-                                        }
-                                        return null;
-                                      },
-                                    );
-                                  }),
-                                  CustomText(
-                                    text: "forget_password".tr,
-                                    color: AppColor.white,
-                                    fontSize: 11,
-                                    //    alignment: Alignment.centerLeft,
-                                  ),
-                                  const SizedBox(height: 15),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: CustomElevatedButton(
-                                      buttonColor: AppColor.buttongreen,
-                                      borderColor: AppColor.appgreen,
-                                      isChildRow: false,
-                                      text: 'Signup'.tr,
-                                      onPressed: () async {
-                                        if (formKey.currentState!.validate()) {
-                                          controller.setLoading(true);
-                                          print(
-                                              "username.text=${controller.username.text}");
-                                          print(
-                                              "password.text=${controller.password.text}");
-                                          // controller.setLoading(true);
-                                          controller.login();
-                                          print('success from login screen');
-                                          // Get.offAll(
-                                          //   () => CustomBottomNavigationBar(),
-                                          // );
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CustomElevatedButton(
-                                    isChildRow: true,
-                                    text: 'change_language'.tr,
-                                    onPressed: () {
-                                      _showBottomSheet(context);
+                                  );
+                                }),
+                                // CustomText(
+                                //   text: "forget_password".tr,
+                                //   color: AppColor.white,
+                                //   fontSize: 11,
+                                //   //    alignment: Alignment.centerLeft,
+                                // ),
+                                const SizedBox(height: 15),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CustomElevatedButton(
+                                    buttonColor: AppColor.buttongreen,
+                                    borderColor: AppColor.appgreen,
+                                    isChildRow: false,
+                                    text: 'login'.tr,
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        controller.setLoading(true);
+                                        print(
+                                            "username.text=${controller.username.text}");
+                                        print(
+                                            "password.text=${controller.password.text}");
+
+                                        controller.login();
+                                        print('success from login screen');
+                                      }
                                     },
-                                    buttonColor: AppColor.white,
-                                    textColor: AppColor.black,
-                                    iconData: Icons.language,
-                                    borderColor: AppColor.white,
                                   ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/icons/iphonlogin.png',
-                                          height: 40, width: 40),
-                                      const SizedBox(
-                                        width: 20,
+                                ),
+                                const SizedBox(height: 10),
+                                CustomElevatedButton(
+                                  isChildRow: true,
+                                  text: 'change_language'.tr,
+                                  onPressed: () {
+                                    _showBottomSheet(context);
+                                  },
+                                  buttonColor: AppColor.white,
+                                  textColor: AppColor.black,
+                                  iconData: Icons.language,
+                                  borderColor: AppColor.white,
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomText(
+                                      text: 'You dont have an account ?',
+                                      color: AppColor.appgreen,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => Get.offAll(
+                                        () => RegisterScreen(),
                                       ),
-                                      SizedBox(
-                                        child: Image.asset(
-                                            'assets/icons/facebook.png',
-                                            height: 40,
-                                            width: 40),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      SizedBox(
-                                        child: Image.asset(
-                                            'assets/icons/googleicon.png',
-                                            height: 40,
-                                            width: 40),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CustomText(
-                                        text: 'You dont have an account ?',
-                                        color: AppColor.appgreen,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => Get.offAll(
-                                          () => RegisterScreen(),
-                                        ),
-                                        child: Container(
-                                          child: CustomText(
-                                            text: 'Register',
-                                            color: AppColor.white,
-                                          ),
+                                      child: Container(
+                                        child: CustomText(
+                                          text: 'Register',
+                                          color: AppColor.white,
                                         ),
                                       ),
-                                    ],
-                                  )
-                                ]),
-                          ),
+                                    ),
+                                  ],
+                                )
+                              ]),
                         ),
                       );
                     }),

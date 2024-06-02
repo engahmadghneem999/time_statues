@@ -67,7 +67,7 @@ class LangTranslation extends Translations {
 
           //تسجيل الدخول
           'login': 'تسجيل الدخول',
-          'Signup': 'التسجيل',
+          'Signup': 'انشاء حساب',
           'please_login': 'فضلا قم بتسجيل الدخول للاستمرار',
           'please_register': 'فضلا قم بإدخال بياناتك لانشاء الحساب ',
           'phone_number': 'رقم الهاتف',
