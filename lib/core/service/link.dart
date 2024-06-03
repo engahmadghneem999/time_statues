@@ -1,44 +1,31 @@
 import '../constant/constant_data.dart';
 
 class AppLink {
-  //root
+  // Root
   static String appRoot = "http://algor.somee.com";
   static String serverApiRoot = "$appRoot/api";
-  //Home screen graph
-  static String graphData = "$serverApiRoot/GraphData/";
-  //User PROFILE
-  static String getUserData = "$serverApiRoot/User/me";
-  static String getAllFollowings = "$serverApiRoot/User/GetAllFollowings";
-  //My followings screen
-  static String followUser(String id) => "$serverApiRoot/User/FollowUser/$id";
-  static String unFollowUser(String id) =>
-      "$serverApiRoot/User/UnFollowUser/$id";
-  //My followers screen
-  static String getAllFollowers = "$serverApiRoot/User/GetAllFollowers";
-  //One to One Chats
-  //GET chats
-  static String getOneToOneChats = "$serverApiRoot/Chat/ChatPage";
-  static String getInOneToOneChats(String id) =>
-      "$serverApiRoot/Chat/ChatWithUser/$id";
-
-  //Messages pin and fav POSTS
-  static String pinMessage(int id) => "$serverApiRoot/Chat/PinMessage/$id";
-  static String favMessage(int id) =>
-      "$serverApiRoot/Chat/FavouriteMessage/$id";
-  // fav and pinned GET
-  static String getfavMessage(int id) =>
-      "$serverApiRoot/Chat/GetFavouriteMessages/$id";
-  static String getpinedMessage(String id) =>
-      "$serverApiRoot/Chat/GetPinMessages/$id";
-  //AUTH LINKS
+  // Auth Links
   static String login = "$serverApiRoot/User/Login";
   static String register = "$serverApiRoot/User/register";
   static String logout = "$serverApiRoot/logout";
-  //Groups
-  //GET chats
+  // Home screen
+  static String graphData = "$serverApiRoot/GraphData/";
+  // User Profile
+  static String getUserData = "$serverApiRoot/User/me";
+  static String getAllFollowings = "$serverApiRoot/User/GetAllFollowings";
+  static String followUser(String id) => "$serverApiRoot/User/FollowUser/$id";
+  static String unFollowUser(String id) => "$serverApiRoot/User/UnFollowUser/$id";
+  static String getAllFollowers = "$serverApiRoot/User/GetAllFollowers";
+  // One to One Chats
+  static String getOneToOneChats = "$serverApiRoot/Chat/ChatPage";
+  static String getInOneToOneChats(String id) => "$serverApiRoot/Chat/ChatWithUser/$id";
+  static String pinMessage(int id) => "$serverApiRoot/Chat/PinMessage/$id";
+  static String favMessage(int id) => "$serverApiRoot/Chat/FavouriteMessage/$id";
+  static String getfavMessage(int id) => "$serverApiRoot/Chat/GetFavouriteMessages/$id";
+  static String getpinedMessage(String id) => "$serverApiRoot/Chat/GetPinMessages/$id";
+  // Groups
   static String getGroupsChats = "$serverApiRoot/ChatGroup";
-  static String joinToGroup(int id) =>
-      "$serverApiRoot/ChatGroup/JoinToGroup/$id";
+  static String joinToGroup(int id) => "$serverApiRoot/ChatGroup/JoinToGroup/$id";
 }
 
 Map<String, String> getHeader() {

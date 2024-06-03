@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:time_status/core/app_export.dart';
-import 'package:time_status/view/create_task/screen/create_task.dart';
+import 'package:time_status/view/map/controller/mapcontroller.dart';
 import 'package:time_status/view/mytasks/screens/team_screen.dart';
-import 'package:intl/intl.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({Key? key}) : super(key: key); // Fix the key parameter
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -20,8 +20,12 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  final TaskController taskController = Get.put(TaskController());
 
-  static const CameraPosition _kGooglePlex = CameraPosition(target: LatLng(21.5303919, 39.1608216), zoom: 14.999,);
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(21.5303919, 39.1608216),
+    zoom: 14.999,
+  );
 
   List<Marker> markers = [];
   Set<Circle> circles = {};
@@ -33,9 +37,60 @@ class _MapScreenState extends State<MapScreen> {
     MapType.normal,
     MapType.satellite,
     MapType.hybrid,
-    MapType.terrain
+    MapType.terrain,
   ];
-  MapType _currentMapType = MapType.satellite;
+  MapType _currentMapType = MapType.normal;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTasks();
+  }
+
+  Future<void> _fetchTasks() async {
+    try {
+      await taskController.fetchMainTasks();
+      setState(() {
+        _addTaskMarkersAndCircles();
+      });
+    } catch (e) {
+      print("Error fetching tasks: $e");
+    }
+  }
+
+  void _addTaskMarkersAndCircles() {
+    markers.clear();
+    circles.clear();
+    for (var task in taskController.mainTasks) {
+      if (task.lat != null && task.lng != null) {
+        try {
+          final double lat = double.parse(task.lat!);
+          final double lng = double.parse(task.lng!);
+
+          final markerId = MarkerId(task.id.toString());
+          markers.add(Marker(
+            markerId: markerId,
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(
+              title: task.title,
+              snippet: task.description,
+            ),
+          ));
+
+          circles.add(Circle(
+            circleId: CircleId(markerId.value),
+            center: LatLng(lat, lng),
+            radius: 100.0,
+            fillColor: Colors.blue.withOpacity(0.3),
+            strokeColor: Colors.blue,
+            strokeWidth: 2,
+          ));
+        } catch (e) {
+          print("Error parsing latitude or longitude: $e");
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +133,7 @@ class _MapScreenState extends State<MapScreen> {
                     child: Text(mapType.toString().split('.')[1],
                         style: const TextStyle(
                             color: AppColor.appColor,
-                            fontWeight: FontWeight
-                                .bold)), // Display only the map type name
+                            fontWeight: FontWeight.bold)),
                   );
                 }).toList(),
                 onChanged: (MapType? newMapType) {
@@ -98,9 +152,8 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _onMapTapped(LatLng tappedPoint) {
-    const double tapCircleRadius = 20.0; // Adjust as needed
+    const double tapCircleRadius = 20.0;
 
-    // Check if any circle was tapped
     final tappedCircle = circles.firstWhere(
       (circle) {
         final double distance = calculateDistance(
@@ -114,12 +167,9 @@ class _MapScreenState extends State<MapScreen> {
     );
 
     _onCircleTapped(tappedCircle);
-    }
+  }
 
   void _onCircleTapped(Circle tappedCircle) {
-    TextEditingController radiusController = TextEditingController();
-    radiusController.text = tappedCircle.radius.toString();
-
     double newRadius = tappedCircle.radius;
 
     AwesomeDialog(
@@ -133,16 +183,16 @@ class _MapScreenState extends State<MapScreen> {
           SleekCircularSlider(
             min: 0,
             max: 1000,
-            initialValue: tappedCircle.radius * 2, // Initialize slider with the current diameter
+            initialValue: tappedCircle.radius * 2,
             onChange: (double value) {
               setState(() {
-                newRadius = value / 2; // Update the new radius value based on the slider value
+                newRadius = value / 2;
               });
             },
             innerWidget: (double value) {
               return Center(
                 child: Text(
-                  '${NumberFormat.decimalPattern().format(value)} متر', // تنسيق القيمة بالأمتار
+                  '${NumberFormat.decimalPattern().format(value)} متر',
                   style: TextStyle(fontSize: 16.0),
                 ),
               );
@@ -152,7 +202,8 @@ class _MapScreenState extends State<MapScreen> {
           ElevatedButton(
             onPressed: () {
               setState(() {
-                circles.removeWhere((circle) => circle.circleId == tappedCircle.circleId);
+                circles.removeWhere(
+                    (circle) => circle.circleId == tappedCircle.circleId);
                 circles.add(
                   Circle(
                     circleId: tappedCircle.circleId,
@@ -180,67 +231,14 @@ class _MapScreenState extends State<MapScreen> {
       ),
     ).show();
   }
-  // void _onCircleTapped(Circle tappedCircle) {
-  //   TextEditingController radiusController = TextEditingController();
-  //   radiusController.text = (tappedCircle.radius * 2).toStringAsFixed(2);
-  //
-  //   double newRadius = tappedCircle.radius;
-  //
-  //   AwesomeDialog(
-  //     context: context,
-  //     animType: AnimType.scale,
-  //     dialogType: DialogType.info,
-  //     body: Column(
-  //       children: [
-  //         const Text('Update Circle Diameter'),
-  //         const SizedBox(height: 10),
-  //         SleekCircularSlider(
-  //           min: 0,
-  //           max: 1000,
-  //           initialValue: tappedCircle.radius,
-  //           onChange: (double value) {
-  //             setState(() {
-  //               newRadius = value;
-  //             });
-  //           },
-  //         ),
-  //         const SizedBox(height: 10),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             setState(() {
-  //               circles.removeWhere((circle) => circle.circleId == tappedCircle.circleId);
-  //               circles.add(
-  //                 Circle(
-  //                   circleId: tappedCircle.circleId,
-  //                   center: tappedCircle.center,
-  //                   radius: newRadius,
-  //                   fillColor: Colors.blue.withOpacity(0.3),
-  //                   strokeColor: Colors.blue,
-  //                   strokeWidth: 2,
-  //                 ),
-  //               );
-  //             });
-  //             Navigator.of(context).pop();
-  //           },
-  //           child: const Text('Update Diameter'),
-  //         ),
-  //         const SizedBox(height: 10),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             // Add your functionality here
-  //           },
-  //           child: const Text('Show Task'),
-  //         ),
-  //         const SizedBox(height: 10),
-  //       ],
-  //     ),
-  //   ).show();
-  // }
-  //
 
-
-  double calculateDistance(double lat1, double lon1, double lat2, double lon2,) {
-    const R = 6371.0; // Earth radius in kilometers
+  double calculateDistance(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+  ) {
+    const R = 6371.0;
 
     final latDistance = radians(lat2 - lat1);
     final lonDistance = radians(lon2 - lon1);
@@ -252,11 +250,13 @@ class _MapScreenState extends State<MapScreen> {
             sin(lonDistance / 2);
     final c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-    final distance = R * c * 1000; // Convert to meters
+    final distance = R * c * 1000;
     return distance;
   }
 
-  double radians(double degree) {return degree * (pi / 180);}
+  double radians(double degree) {
+    return degree * (pi / 180);
+  }
 
   _showMarkerInfoDialog(LatLng latLng) {
     return AwesomeDialog(
@@ -280,28 +280,8 @@ class _MapScreenState extends State<MapScreen> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                final MarkerId markerId = MarkerId(markers.length.toString());
-                markers.add(Marker(
-                  markerId: markerId,
-                  position: latLng,
-                  infoWindow: InfoWindow(
-                    title: titletaskController.text,
-                    snippet: descriptionController.text,
-                  ),
-                ));
-
-                circles.add(
-                  Circle(
-                    circleId: CircleId(markerId.value),
-                    center: latLng,
-                    radius: 100.0,
-                    fillColor: Colors.blue.withOpacity(0.3),
-                    strokeColor: Colors.blue,
-                    strokeWidth: 2,
-                  ),
-                );
-              });
+              _createTaskAndAddMarker(
+                  latLng); // Call method to create task and add marker
               Navigator.of(context).pop();
             },
             child: const Text('Add Marker'),
@@ -317,33 +297,69 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ],
       ),
-      btnOkOnPress: () {
-        setState(() {
-          final MarkerId markerId = MarkerId(markers.length.toString());
-          markers.add(Marker(
-            markerId: markerId,
-            position: latLng,
-            infoWindow: InfoWindow(
-              title: titletaskController.text,
-              snippet: descriptionController.text,
-            ),
-          ));
+    )..show();
+  }
 
-          circles.add(
-            Circle(
-              circleId: CircleId(markerId.value),
-              center: latLng,
-              radius: 100.0,
-              fillColor: Colors.blue.withOpacity(0.3),
-              strokeColor: Colors.blue,
-              strokeWidth: 2,
-            ),
-          );
-        });
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CreateTask(titletask: titletaskController.text)));
+  Future<void> _createTaskAndAddMarker(LatLng latLng) async {
+    try {
+      showLoadingDialog(); // Show loading dialog
+      await taskController.createTask(
+        // Create task using TaskController
+        titletaskController.text,
+        descriptionController.text,
+        latLng.latitude.toString(),
+        latLng.longitude.toString(),
+      );
+
+      // Add marker and circle for the newly created task
+      setState(() {
+        final MarkerId markerId = MarkerId(markers.length.toString());
+        markers.add(Marker(
+          markerId: markerId,
+          position: latLng,
+          infoWindow: InfoWindow(
+            title: titletaskController.text,
+            snippet: descriptionController.text,
+          ),
+        ));
+
+        circles.add(
+          Circle(
+            circleId: CircleId(markerId.value),
+            center: latLng,
+            radius: 100.0,
+            fillColor: Colors.blue.withOpacity(0.3),
+            strokeColor: Colors.blue,
+            strokeWidth: 2,
+          ),
+        );
+      });
+
+      Navigator.of(context).pop(); // Close loading dialog
+    } catch (e) {
+      // Show error dialog if task creation fails
+      Navigator.of(context).pop();
+      showErrorDialog('Failed to create task');
+    }
+  }
+
+  void showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
+    );
+  }
+
+  void showErrorDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      body: Text(message),
     )..show();
   }
 }
-
