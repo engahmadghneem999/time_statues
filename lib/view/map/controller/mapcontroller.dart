@@ -5,7 +5,7 @@ import 'package:time_status/core/constant/shared_preferences_keys.dart';
 import 'package:time_status/core/service/service.dart';
 import 'package:time_status/view/map/model/get_main_task.dart';
 
-class TaskController extends GetxController {
+class MainTaskController extends GetxController {
   var url = Uri.parse("http://algor.somee.com/api/MainTask");
   MyServices myServices = Get.find();
   RxList<MainTask> mainTasks = <MainTask>[].obs; // Define mainTasks as a RxList
@@ -25,19 +25,7 @@ class TaskController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        print("Getting successfully");
-
-        // Print the data fetched from the API
         List<dynamic> data = jsonDecode(response.body);
-        for (var task in data) {
-          print("Name: ${task['title']}");
-          print("Description: ${task['description']}");
-          print("Latitude: ${task['lat']}");
-          print("Longitude: ${task['lng']}");
-          print(""); // Add an empty line for separation
-        }
-
-        // Assign fetched data to mainTasks
         mainTasks
             .assignAll(data.map((task) => MainTask.fromJson(task)).toList());
       } else {
@@ -45,16 +33,23 @@ class TaskController extends GetxController {
       }
     } catch (e) {
       print("Error fetching tasks: $e");
+      throw Exception("Error fetching tasks: $e"); // Re-throw the exception
     }
   }
 
-  Future<void> createTask(
-      String title, String description, String lat, String lng) async {
+  Future<void> createSubTask({
+    required int mainTaskId,
+    required String icon,
+    required String timer,
+    required String color,
+    required double lat,
+    required double lng,
+  }) async {
     try {
       var token = myServices.sharedPreferences
           .getString(SharedPreferencesKeys.tokenKey);
       final response = await http.post(
-        url,
+        Uri.parse('http://algor.somee.com/api/Task'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -62,25 +57,26 @@ class TaskController extends GetxController {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'title': title,
-          'description': description,
-          'lat': lat,
-          'lng': lng,
+          "icon": icon,
+          "timer": timer,
+          "color": color,
+          "mainTaskId": mainTaskId,
+          "lat": lat.toString(),
+          "lng": lng.toString(),
         }),
       );
 
       if (response.statusCode == 200) {
-        print("Task sent successfully:");
-        print("Name: $title");
-        print("Description: $description");
-        print("Latitude: $lat");
-        print("Longitude: $lng");
+        print('Sub-task created successfully.');
+        fetchMainTasks(); // Refresh tasks after adding a sub-task
+        Get.snackbar('Success', 'Sub-task created successfully.');
       } else {
-        throw Exception("Failed to create task");
+        Get.snackbar('Error', 'Failed to create sub-task.');
+        print("Failed to create sub-task: ${response.body}");
       }
     } catch (e) {
-      print("Error creating task: $e");
-      throw Exception("Failed to create task");
+      print("Error creating sub-task: $e");
+      throw Exception("Error creating sub-task: $e"); // Re-throw the exception
     }
   }
 }

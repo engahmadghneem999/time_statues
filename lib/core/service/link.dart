@@ -14,18 +14,27 @@ class AppLink {
   static String getUserData = "$serverApiRoot/User/me";
   static String getAllFollowings = "$serverApiRoot/User/GetAllFollowings";
   static String followUser(String id) => "$serverApiRoot/User/FollowUser/$id";
-  static String unFollowUser(String id) => "$serverApiRoot/User/UnFollowUser/$id";
+  static String unFollowUser(String id) =>
+      "$serverApiRoot/User/UnFollowUser/$id";
   static String getAllFollowers = "$serverApiRoot/User/GetAllFollowers";
   // One to One Chats
   static String getOneToOneChats = "$serverApiRoot/Chat/ChatPage";
-  static String getInOneToOneChats(String id) => "$serverApiRoot/Chat/ChatWithUser/$id";
+  static String getInOneToOneChats(String id) =>
+      "$serverApiRoot/Chat/ChatWithUser/$id";
   static String pinMessage(int id) => "$serverApiRoot/Chat/PinMessage/$id";
-  static String favMessage(int id) => "$serverApiRoot/Chat/FavouriteMessage/$id";
-  static String getfavMessage(int id) => "$serverApiRoot/Chat/GetFavouriteMessages/$id";
-  static String getpinedMessage(String id) => "$serverApiRoot/Chat/GetPinMessages/$id";
+  static String favMessage(int id) =>
+      "$serverApiRoot/Chat/FavouriteMessage/$id";
+  static String getfavMessage(int id) =>
+      "$serverApiRoot/Chat/GetFavouriteMessages/$id";
+  static String getpinedMessage(String id) =>
+      "$serverApiRoot/Chat/GetPinMessages/$id";
   // Groups
   static String getGroupsChats = "$serverApiRoot/ChatGroup";
-  static String joinToGroup(int id) => "$serverApiRoot/ChatGroup/JoinToGroup/$id";
+  static String joinToGroup(int id) =>
+      "$serverApiRoot/ChatGroup/JoinToGroup/$id";
+  // Tasks
+  static String getMainTask = "$serverApiRoot/MainTask";
+  static String getSubTask = "$serverApiRoot/Task";
 }
 
 Map<String, String> getHeader() {

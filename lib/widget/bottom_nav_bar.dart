@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:time_status/core/app_export.dart';
+import 'package:time_status/view/creating_tasks/screens/creating_task_screen.dart';
 import 'package:time_status/view/chatting/one_to_one_chat/views/main_chat_screen/main_chat_screen.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
-import 'package:time_status/view/map/screen/mapscreen.dart';
-import 'package:time_status/view/mytasks/screens/team_screen.dart';
+import 'package:time_status/view/map/screen/map_screen.dart';
+import 'package:time_status/view/mytasks/screens/my_tasks.dart';
 import '../view/splash/screen/widgets/custom_text.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -21,7 +22,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
     const HomeScreen(),
     MapScreen(),
     const MainChat(),
-    const MyTasks(),
+    MyTasksPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -63,52 +64,7 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
             ),
             secondChild: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: FloatingActionButton(
-                    heroTag: "text",
-                    onPressed: () {
-                      // Handle the first action here
-                    },
-                    backgroundColor: AppColor.appgreen,
-                    elevation: 0,
-                    child: const Icon(
-                      Icons.format_size,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                FloatingActionButton(
-                  heroTag: "image",
-                  onPressed: () {
-                    // Handle the second action here
-                  },
-                  backgroundColor: AppColor.appgreen,
-                  elevation: 0,
-                  child: const Icon(
-                    Icons.insert_photo,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: FloatingActionButton(
-                    heroTag: "video",
-                    onPressed: () {
-                      // Handle the third action here
-                    },
-                    backgroundColor: AppColor.appgreen,
-                    elevation: 0,
-                    child: const Icon(
-                      Icons.videocam,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
+              children: [],
             ),
             crossFadeState: _isExpanded
                 ? CrossFadeState.showSecond
@@ -120,7 +76,15 @@ class _MyHomePageState extends State<CustomBottomNavigationBar> {
             padding: const EdgeInsets.only(bottom: 40.0),
             child: FloatingActionButton(
               heroTag: "add_close",
-              onPressed: _toggleExpanded,
+              onPressed: () {
+                if (_isExpanded) {
+                  _toggleExpanded();
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => CreatingTasks()),
+                  );
+                }
+              },
               backgroundColor:
                   _isExpanded ? AppColor.appgreen : AppColor.appColor,
               elevation: 0,

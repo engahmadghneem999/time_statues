@@ -4,8 +4,8 @@ import 'package:time_status/core/constant/routes.dart';
 import 'package:time_status/view/chatting/groups%20chat/screens/groups_screen.dart';
 import 'package:time_status/view/home/screen/home_screen.dart';
 import 'package:time_status/view/login/binding/login_binding.dart';
-import 'package:time_status/view/map/screen/mapscreen.dart';
-import 'package:time_status/view/mytasks/screens/team_screen.dart';
+import 'package:time_status/view/map/screen/map_screen.dart';
+import 'package:time_status/view/mytasks/screens/my_tasks.dart';
 import 'package:time_status/view/profile/screens/profile.dart';
 import 'package:time_status/view/splash/binding/splash_binding.dart';
 import 'package:time_status/view/splash/screen/splash_screen.dart';
@@ -41,7 +41,7 @@ List<GetPage<dynamic>>? routes = [
   ),
   GetPage(
     name: AppRoute.team,
-    page: () => const MyTasks(),
+    page: () => MyTasksPage(),
     transition: Transition.downToUp,
   ),
   GetPage(
